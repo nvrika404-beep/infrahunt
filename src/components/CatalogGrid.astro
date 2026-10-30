@@ -1,0 +1,78 @@
+---
+import ProductCard from './ProductCard.astro';
+import { categories } from '../data/content';
+import type { Product } from '../lib/catalog';
+
+interface Props { items: Product[]; filters?: boolean }
+const { items, filters = false } = Astro.props;
+const used = categories.filter((c) => items.some((p) => p.category.slug === c.slug));
+---
+<div class="toolbar">
+  {filters && (
+    <div class="filters" role="group" aria-label="Тип прибора">
+      <button type="button" class="filter is-active" data-filter="">Все <span>{items.length}</span></button>
+      {used.map((c) => (
+        <button type="button" class="filter" data-filter={c.slug}>{c.short} <span>{items.filter((p) => p.category.slug === c.slug).length}</span></button>
+      ))}
+    </div>
+  )}
+  <label class="sort">
+    <span>Сортировка</span>
+    <select data-sort>
+      <option value="">По популярности</option>
+      <option value="price-asc">Сначала дешевле</option>
+      <option value="price-desc">Сначала дороже</option>
+    </select>
+  </label>
+</div>
+<div class="grid" data-catalog>
+  {items.map((p, i) => (
+    <div class="cell" data-category={p.category.slug} data-price={p.price ?? ''} data-order={i}>
+      <ProductCard product={p} eager={i < 3} />
+    </div>
+  ))}
+</div>
+
+<script>
+  const grid = document.querySelector<HTMLElement>('[data-catalog]');
+  if (grid) {
+    const cells = [...grid.querySelectorAll<HTMLElement>('.cell')];
+    const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const select = document.querySelector<HTMLSelectElement>('[data-sort]');
+    const apply = (filter: string) => {
+      cells.forEach((c) => (c.hidden = Boolean(filter) && c.dataset.category !== filter));
+      buttons.forEach((b) => b.classList.toggle('is-active', b.dataset.filter === filter));
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => {
+      apply(b.dataset.filter!);
+      const url = new URL(location.href);
+      if (b.dataset.filter) url.searchParams.set('type', b.dataset.filter); else url.searchParams.delete('type');
+      history.replaceState(null, '', url);
+    }));
+    const initial = new URLSearchParams(location.search).get('type');
+    if (initial && buttons.some((b) => b.dataset.filter === initial)) apply(initial);
+    select?.addEventListener('change', () => {
+      const price = (c: HTMLElement) => (c.dataset.price ? Number(c.dataset.price) : Infinity);
+      const sorted = [...cells].sort((a, b) =>
+        select.value === 'price-asc' ? price(a) - price(b)
+        : select.value === 'price-desc' ? (price(b) === Infinity ? -1 : price(a) === Infinity ? 1 : price(b) - price(a))
+        : Number(a.dataset.order) - Number(b.dataset.order));
+      grid.append(...sorted);
+    });
+  }
+</script>
+
+<style>
+  .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter { padding: 9px 15px; border-radius: 999px; border: 1px solid var(--line-strong); background: transparent; font-weight: 700; font-size: 14px; transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+  .filter span { color: var(--faint); margin-left: 4px; }
+  .filter:hover { border-color: var(--text); }
+  .filter.is-active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .filter.is-active span { color: rgba(11, 12, 15, 0.55); }
+  .sort { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); margin-left: auto; }
+  .sort select { appearance: none; padding: 10px 38px 10px 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23a3a5ad' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 12px center / 12px; color: var(--text); font-weight: 600; }
+  .cell[hidden] { display: none; }
+  .cell { display: flex; }
+  .cell > :global(*) { flex: 1; }
+</style>

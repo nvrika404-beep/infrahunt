@@ -1,0 +1,169 @@
+---
+import { categories } from '../data/content';
+import { site } from '../data/site';
+import { productsIn } from '../lib/catalog';
+
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/catalog/', label: 'Каталог' },
+  { href: '/compare/', label: 'Сравнение' },
+  { href: '/dostavka-i-oplata/', label: 'Доставка и оплата' },
+  { href: '/kontakty/', label: 'Контакты' },
+];
+---
+<header class="header">
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <span>Официальная продукция RikaNV · доставка по всей России</span>
+      <span class="topbar-links">
+        <a href={site.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
+        <a href={site.telegram} target="_blank" rel="noopener">Telegram</a>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </span>
+    </div>
+  </div>
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="InfraHunt — на главную">
+      <span class="brand-mark"><img src="/img/logo.png" width="360" height="169" alt="" /></span>
+      <span class="brand-text"><b>Infra<span>Hunt</span></b><small>тепловизоры RikaNV</small></span>
+    </a>
+
+    <nav class="nav" aria-label="Основное меню">
+      <div class="nav-catalog">
+        <a href="/catalog/" class:list={['nav-link', { 'is-current': path.startsWith('/catalog') || path.startsWith('/product') }]}>
+          Каталог <svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3 4.5 3 3 3-3" /></svg>
+        </a>
+        <div class="mega">
+          {categories.map((c) => (
+            <a class="mega-item" href={`/catalog/${c.slug}/`}>
+              <b>{c.title}</b>
+              <small>{c.comingSoon ? 'Скоро' : `${productsIn(c.slug).length} ${productsIn(c.slug).length === 1 ? 'модель' : productsIn(c.slug).length < 5 ? 'модели' : 'моделей'}`}</small>
+            </a>
+          ))}
+        </div>
+      </div>
+      {nav.slice(1).map((item) => (
+        <a href={item.href} class:list={['nav-link', { 'is-current': path === item.href }]}>{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="actions">
+      <a class="phone" href={site.phones[0].href}>
+        <small>Консультация</small>{site.phones[0].display}
+      </a>
+      <a class="icon-btn" href="/compare/" aria-label="Сравнение">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7" /></svg>
+        <span class="badge" data-compare-count hidden>0</span>
+      </a>
+      <a class="icon-btn" href="/cart/" aria-label="Корзина">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.3 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2" /><circle cx="9.5" cy="20" r="1.3" /><circle cx="17.5" cy="20" r="1.3" /></svg>
+        <span class="badge" data-cart-count hidden>0</span>
+      </a>
+      <button class="icon-btn burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="drawer" data-burger>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="drawer" id="drawer" hidden>
+    <div class="wrap drawer-inner">
+      <p class="eyebrow">Каталог</p>
+      {categories.map((c) => <a class="drawer-link" href={`/catalog/${c.slug}/`}>{c.title}{c.comingSoon && <small>скоро</small>}</a>)}
+      <p class="eyebrow">Покупателям</p>
+      {nav.slice(1).map((item) => <a class="drawer-link" href={item.href}>{item.label}</a>)}
+      <div class="drawer-contacts">
+        {site.phones.map((p) => <a href={p.href}><small>{p.label}</small>{p.display}</a>)}
+        <div class="drawer-social">
+          <a class="btn btn-ghost btn-sm" href={site.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn btn-ghost btn-sm" href={site.telegram} target="_blank" rel="noopener">Telegram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+  const drawer = document.getElementById('drawer');
+  const setOpen = (open: boolean) => {
+    if (!burger || !drawer) return;
+    drawer.hidden = !open;
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    document.body.classList.toggle('menu-open', open);
+  };
+  burger?.addEventListener('click', () => setOpen(drawer?.hidden ?? false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+  window.matchMedia('(min-width: 1025px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+</script>
+
+<style>
+  .header { position: sticky; top: 0; z-index: 50; background: rgba(11, 12, 15, 0.82); backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--line); }
+  .topbar { border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+  .topbar-inner { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; }
+  .topbar-links { display: flex; gap: 18px; }
+  .topbar-links a:hover { color: var(--text); }
+  .bar { display: flex; align-items: center; gap: 28px; height: 72px; }
+  .brand { display: flex; align-items: center; gap: 12px; flex: none; }
+  .brand-mark { display: grid; place-items: center; width: 64px; height: 44px; border-radius: 12px; background: #f6f3ee; padding: 4px 6px; transition: transform 0.3s var(--ease); }
+  .brand:hover .brand-mark { transform: rotate(-4deg) scale(1.05); }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
+  .brand-text b { font-family: var(--display); font-size: 19px; font-weight: 600; letter-spacing: -0.02em; }
+  .brand-text b span { color: var(--accent); }
+  .brand-text small { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }
+
+  .nav { display: flex; align-items: center; gap: 4px; margin-right: auto; }
+  .nav-link { position: relative; display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; border-radius: 999px; font-weight: 600; font-size: 15px; color: #d9d7d2; transition: color 0.2s, background-color 0.2s; }
+  .nav-link:hover, .nav-link.is-current { color: #fff; background: rgba(255, 255, 255, 0.06); }
+  .nav-link svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.6; transition: transform 0.25s; }
+  .nav-catalog { position: relative; }
+  .nav-catalog:hover .nav-link svg, .nav-catalog:focus-within .nav-link svg { transform: rotate(180deg); }
+  .mega {
+    position: absolute; left: 0; top: calc(100% + 10px); width: 560px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 10px;
+    background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 0.2s, transform 0.25s var(--ease), visibility 0.2s;
+  }
+  .mega::before { content: ''; position: absolute; inset: -12px 0 auto; height: 12px; }
+  .nav-catalog:hover .mega, .nav-catalog:focus-within .mega { opacity: 1; visibility: visible; transform: none; }
+  .mega-item { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border-radius: 12px; transition: background-color 0.2s; }
+  .mega-item:hover { background: var(--surface-2); }
+  .mega-item b { font-size: 15px; }
+  .mega-item small { color: var(--muted); font-size: 12.5px; }
+
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .phone { display: flex; flex-direction: column; font-weight: 700; font-size: 15px; margin-right: 10px; line-height: 1.2; }
+  .phone small { font-size: 11px; font-weight: 600; color: var(--muted); }
+  .phone:hover { color: var(--gold); }
+  .icon-btn { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-strong); background: transparent; transition: border-color 0.2s, background-color 0.2s; }
+  .icon-btn:hover { border-color: var(--text); background: rgba(255, 255, 255, 0.05); }
+  .icon-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .badge { position: absolute; top: -4px; right: -4px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; }
+  .burger { display: none; }
+
+  .drawer { border-top: 1px solid var(--line); background: var(--bg); max-height: calc(100dvh - 100px); overflow-y: auto; }
+  .drawer-inner { display: flex; flex-direction: column; gap: 2px; padding: 20px 0 32px; }
+  .drawer-inner .eyebrow { margin: 14px 0 8px; }
+  .drawer-link { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 17px; font-weight: 600; }
+  .drawer-link small { color: var(--gold); font-size: 12px; }
+  .drawer-contacts { display: grid; gap: 12px; margin-top: 22px; }
+  .drawer-contacts > a { display: flex; flex-direction: column; font-weight: 700; font-size: 18px; }
+  .drawer-contacts small { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .drawer-social { display: flex; gap: 10px; margin-top: 6px; }
+
+  @media (max-width: 1180px) { .phone { display: none; } }
+  @media (max-width: 1024px) {
+    .nav { display: none; }
+    .burger { display: grid; }
+    .actions { margin-left: auto; }
+    .topbar-links a:last-child { display: none; }
+  }
+  @media (max-width: 640px) {
+    .topbar { display: none; }
+    .bar { height: 64px; gap: 12px; }
+    .brand-mark { width: 54px; height: 38px; }
+    .brand-text b { font-size: 17px; }
+    .brand-text small { display: none; }
+    .icon-btn { width: 40px; height: 40px; }
+  }
+  :global(body.menu-open) { overflow: hidden; }
+</style>

@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /cart/
+Disallow: /compare/
+Disallow: /api/
+Allow: /
+
+Sitemap: https://infrahunt.ru/sitemap-index.xml

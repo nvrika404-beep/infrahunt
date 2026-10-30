@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Страница не найдена" description="Такой страницы нет на сайте InfraHunt." noindex>
+  <section class="wrap nf">
+    <p class="code heat-text">404</p>
+    <h1>Цель не обнаружена</h1>
+    <p class="muted">Страница переехала или её не было. Загляните в каталог — новинки RikaNV уже там.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="/catalog/">Каталог</a>
+      <a class="btn btn-ghost" href="/">На главную</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { display: grid; justify-items: start; gap: 16px; padding: 80px 0 60px; }
+  .code { font-family: var(--display); font-weight: 600; font-size: clamp(90px, 18vw, 200px); line-height: 1; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+</style>

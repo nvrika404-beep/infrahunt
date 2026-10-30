@@ -1,0 +1,75 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CatalogGrid from '../../components/CatalogGrid.astro';
+import Consult from '../../components/Consult.astro';
+import { categories, type Category } from '../../data/content';
+import { productsIn } from '../../lib/catalog';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { category: category.slug }, props: { category } }));
+}
+
+const { category: c } = Astro.props as { category: Category };
+const items = productsIn(c.slug);
+const soonGroups = c.slug === 'binokli' ? ['Тепловизионные бинокли', 'Дневные бинокли'] : [];
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: c.h1,
+  itemListElement: items.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(p.url, site.url).href, name: p.name })),
+};
+---
+<Base title={c.seoTitle} description={c.seoDescription} jsonLd={items.length ? [itemList] : []}>
+  <div class="wrap">
+    <Breadcrumbs items={[{ href: '/', label: 'Главная' }, { href: '/catalog/', label: 'Каталог' }, { href: `/catalog/${c.slug}/`, label: c.title }]} />
+    <header class="head">
+      <h1>{c.h1}</h1>
+      <p class="intro">{c.intro}</p>
+    </header>
+
+    {items.length > 0 && (
+      <>
+        {c.slug === 'binokli' && <h2 class="sub">Мультиспектральные бинокли Snegir</h2>}
+        <CatalogGrid items={items} />
+      </>
+    )}
+
+    {soonGroups.length > 0 && (
+      <div class="soon-row">
+        {soonGroups.map((title) => (
+          <div class="soon-card"><b>{title}</b><span>Скоро в каталоге. Напишите нам — сообщим о поступлении.</span></div>
+        ))}
+      </div>
+    )}
+
+    {c.comingSoon && (
+      <div class="soon-hero" data-glow>
+        <p class="eyebrow">Раздел готовится</p>
+        <h2>Оптические прицелы, дневные бинокли и коллиматоры</h2>
+        <p class="muted">Сейчас формируем ассортимент дневной оптики. Оставьте заявку по телефону или в мессенджере — сообщим, когда раздел откроется, и поможем с выбором.</p>
+        <div class="soon-actions">
+          <a class="btn btn-primary" href={site.phones[0].href}>Позвонить {site.phones[0].display}</a>
+          <a class="btn btn-ghost" href={`${site.whatsapp}?text=${encodeURIComponent('Здравствуйте! Интересует дневная оптика.')}`} target="_blank" rel="noopener">Написать в WhatsApp</a>
+        </div>
+      </div>
+    )}
+
+    <section class="section"><Consult /></section>
+  </div>
+</Base>
+
+<style>
+  .head { display: grid; gap: 14px; padding: 18px 0 32px; max-width: 860px; }
+  .intro { color: #cfcdc8; font-size: 17px; }
+  .sub { font-size: clamp(20px, 2.2vw, 26px); margin-bottom: 18px; }
+  .soon-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
+  .soon-card { display: flex; flex-direction: column; gap: 6px; padding: 22px; border-radius: var(--radius); border: 1px dashed var(--line-strong); color: var(--muted); font-size: 14.5px; }
+  .soon-card b { color: var(--text); font-family: var(--display); font-weight: 600; font-size: 18px; }
+  .soon-hero { --mx: 20%; --my: 10%; display: grid; gap: 16px; justify-items: start; padding: clamp(28px, 5vw, 56px); border-radius: calc(var(--radius) + 8px); border: 1px dashed rgba(255, 194, 61, 0.4);
+    background: radial-gradient(600px circle at var(--mx) var(--my), rgba(255, 194, 61, 0.12), transparent 60%), var(--surface); }
+  .soon-hero .muted { max-width: 640px; }
+  .soon-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  @media (max-width: 640px) { .soon-row { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+interface Props { title: string; h1: string; description: string; path: string; label: string; noindex?: boolean; jsonLd?: object[] }
+const { title, h1, description, path, label, noindex, jsonLd } = Astro.props;
+---
+<Base title={title} description={description} noindex={noindex} jsonLd={jsonLd}>
+  <div class="wrap">
+    <Breadcrumbs items={[{ href: '/', label: 'Главная' }, { href: path, label }]} />
+    <article class="page">
+      <h1>{h1}</h1>
+      <slot />
+    </article>
+  </div>
+</Base>
+
+<style>
+  .page { max-width: 860px; padding: 18px 0 40px; }
+  .page h1 { margin-bottom: 28px; }
+  .page :global(h2) { font-size: clamp(20px, 2.2vw, 26px); margin: 36px 0 14px; }
+  .page :global(p), .page :global(li) { color: #d4d3cf; font-size: 16.5px; }
+  .page :global(p + p) { margin-top: 12px; }
+  .page :global(ul) { padding-left: 20px; display: grid; gap: 8px; }
+  .page :global(a:not(.btn)) { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+  .page :global(.cards) { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 8px; }
+  .page :global(.card) { padding: 20px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); display: grid; gap: 6px; transition: border-color 0.3s, transform 0.3s var(--ease); }
+  .page :global(.card:hover) { border-color: rgba(255, 122, 26, 0.45); transform: translateY(-3px); }
+  .page :global(.card small) { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+  .page :global(.card b) { font-size: 19px; }
+  .page :global(.card a) { color: var(--text); text-decoration: none; }
+</style>

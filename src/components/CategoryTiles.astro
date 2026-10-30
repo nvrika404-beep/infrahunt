@@ -1,0 +1,79 @@
+---
+import { categories } from '../data/content';
+import { productsIn, productBySlug } from '../lib/catalog';
+
+// Какой прибор показывать на плитке раздела.
+const cover: Record<string, string> = {
+  'teplovizionnye-pricely': 'kaban-650-lrf',
+  'teplovizory-nablyudeniya': 'sinica-630',
+  'teplovizionnye-nasadki': 'ehidna-g-ec-1',
+  binokli: 'snegir-640',
+  dalnomery: 'strekoza-brf-4000',
+};
+const plural = (n: number) => (n === 1 ? 'модель' : n < 5 ? 'модели' : 'моделей');
+---
+<div class="tiles">
+  {categories.map((c, i) => {
+    const product = cover[c.slug] ? productBySlug(cover[c.slug]) : undefined;
+    const count = productsIn(c.slug).length;
+    return (
+      <a class:list={['tile', { wide: i === 0, soon: c.comingSoon }]} href={`/catalog/${c.slug}/`} data-glow>
+        <span class="text">
+          <span class="count">{c.comingSoon ? 'Скоро' : `${count} ${plural(count)}`}</span>
+          <span class="title">{c.title}</span>
+          <span class="go">Смотреть <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+        </span>
+        {product ? (
+          <img src={product.images[0].thumb} width={product.images[0].w} height={product.images[0].h} alt="" loading="lazy" decoding="async" />
+        ) : (
+          <svg class="soon-art" viewBox="0 0 200 120" aria-hidden="true"><circle cx="60" cy="60" r="34" /><circle cx="140" cy="60" r="34" /><path d="M94 52h12M60 26v-8M140 26v-8" /></svg>
+        )}
+      </a>
+    );
+  })}
+</div>
+
+<style>
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .tile {
+    --mx: 50%; --my: 50%;
+    position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; padding: 22px; border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--line); overflow: hidden; isolation: isolate; transition: border-color 0.3s, transform 0.45s var(--ease);
+  }
+  .tile::before { content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity 0.4s; background: radial-gradient(360px circle at var(--mx) var(--my), rgba(255, 90, 31, 0.22), transparent 65%); }
+  .tile:hover { border-color: rgba(255, 122, 26, 0.4); transform: translateY(-4px); }
+  .tile:hover::before { opacity: 1; }
+  .tile.wide { grid-column: span 2; grid-row: span 2; min-height: 496px; }
+  .text { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 6px; max-width: 70%; }
+  .count { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-2); }
+  .title { font-family: var(--display); font-size: 21px; font-weight: 600; line-height: 1.15; }
+  .wide .title { font-size: clamp(26px, 3vw, 38px); }
+  .go { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; font-weight: 700; font-size: 14px; color: var(--muted); transition: color 0.2s, gap 0.3s var(--ease); }
+  .go svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .tile:hover .go { color: var(--text); gap: 12px; }
+  /* Фото прибора при наведении «переходит в тепловизор»: палитра железо-накала. */
+  .tile img {
+    position: absolute; right: -6%; bottom: -4%; width: 64%; height: 70%; object-fit: contain; object-position: right bottom;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6)); transition: transform 0.6s var(--ease), filter 0.6s;
+  }
+  .wide img { width: 88%; height: 72%; right: -4%; }
+  .tile:hover img { transform: scale(1.07) rotate(-2deg); filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6)) sepia(1) saturate(4) hue-rotate(-28deg) brightness(1.05) contrast(1.1); }
+  .soon { border-style: dashed; grid-column: 1 / -1; min-height: 150px; }
+  .soon .text { max-width: 60%; }
+  .soon-art { position: absolute; right: 24px; bottom: 50%; translate: 0 50%; width: 200px; fill: none; stroke: var(--faint); stroke-width: 3; stroke-linecap: round; transition: stroke 0.4s; }
+  .soon:hover .soon-art { stroke: var(--gold); }
+  @media (max-width: 1024px) { .tiles { grid-template-columns: repeat(2, 1fr); } .tile.wide { grid-row: auto; min-height: 320px; } }
+  @media (max-width: 560px) {
+    .tiles { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .tile { min-height: 190px; padding: 16px; }
+    .tile.wide { min-height: 260px; }
+    .title { font-size: 15px; hyphens: auto; overflow-wrap: anywhere; }
+    .wide .title { font-size: 24px; }
+    .text { max-width: 100%; }
+    .go { font-size: 13px; }
+    .tile img { width: 64%; height: 44%; right: -8%; bottom: -6%; }
+    .wide img { width: 70%; height: 60%; }
+    .soon .text { max-width: 60%; }
+    .soon-art { width: 120px; right: 14px; }
+  }
+</style>

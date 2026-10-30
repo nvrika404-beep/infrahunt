@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CatalogGrid from '../../components/CatalogGrid.astro';
+import CategoryTiles from '../../components/CategoryTiles.astro';
+import Consult from '../../components/Consult.astro';
+import { products } from '../../lib/catalog';
+import { site } from '../../data/site';
+
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Каталог тепловизионной оптики RikaNV',
+  itemListElement: products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(p.url, site.url).href, name: p.name })),
+};
+---
+<Base
+  title="Каталог тепловизоров RikaNV: прицелы, монокуляры, насадки, бинокли, дальномеры"
+  description="Каталог тепловизионной оптики RikaNV в InfraHunt: прицелы Kaban, Moskit, Dovod PRO, монокуляр Sinica, насадка Ehidna, бинокли Snegir, дальномеры Strekoza. Цены, фильтры, сравнение."
+  jsonLd={[itemList]}
+>
+  <div class="wrap">
+    <Breadcrumbs items={[{ href: '/', label: 'Главная' }, { href: '/catalog/', label: 'Каталог' }]} />
+    <header class="head">
+      <h1>Каталог тепловизионной оптики RikaNV</h1>
+      <p class="muted">{products.length} моделей новой линейки: от доступного прицела Moskit до охлаждаемой насадки Ehidna. Добавляйте приборы к сравнению — до четырёх сразу.</p>
+    </header>
+    <CatalogGrid items={products} filters />
+    <section class="section" aria-labelledby="sections">
+      <h2 id="sections" class="sections-title">Разделы каталога</h2>
+      <CategoryTiles />
+    </section>
+    <Consult />
+  </div>
+</Base>
+
+<style>
+  .head { display: grid; gap: 14px; padding: 18px 0 32px; max-width: 820px; }
+  .sections-title { margin-bottom: 24px; }
+</style>

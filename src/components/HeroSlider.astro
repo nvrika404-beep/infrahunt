@@ -1,0 +1,80 @@
+---
+const slides = [
+  { name: 'kaban', href: '/catalog/teplovizionnye-pricely/', alt: 'Новинка от RikaNV — тепловизионный прицел Kaban' },
+  { name: 'moskit', href: '/catalog/teplovizionnye-pricely/', alt: 'Новинка от RikaNV — тепловизионный прицел Moskit' },
+  { name: 'rikanv', href: '/catalog/', alt: 'Тепловизионные прицелы RikaNV Kaban 350 LRF и Moskit 650 LRF' },
+];
+---
+<section class="slider" aria-roledescription="карусель" aria-label="Новинки RikaNV">
+  <div class="track" data-track>
+    {slides.map((s, i) => (
+      <a class="slide" href={s.href} aria-label={`${i + 1} из ${slides.length}: ${s.alt}`}>
+        <picture>
+          <source media="(max-width: 640px)" srcset={`/img/banners/${s.name}-tall.webp`} />
+          <img src={`/img/banners/${s.name}-wide.webp`} width="1104" height="524" alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
+        </picture>
+      </a>
+    ))}
+  </div>
+  <button class="arrow prev" type="button" aria-label="Предыдущий баннер" data-prev><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6" /></svg></button>
+  <button class="arrow next" type="button" aria-label="Следующий баннер" data-next><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6" /></svg></button>
+  <div class="dots" role="tablist" aria-label="Выбор баннера">
+    {slides.map((_, i) => <button type="button" role="tab" aria-label={`Баннер ${i + 1}`} data-dot={i} aria-selected={i === 0 ? 'true' : 'false'}><span></span></button>)}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.slider').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-track]')!;
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    const count = dots.length;
+    let index = 0;
+    let timer = 0;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const go = (i: number) => {
+      index = (i + count) % count;
+      track.scrollTo({ left: track.clientWidth * index, behavior: reduced ? 'auto' : 'smooth' });
+    };
+    const mark = () => {
+      index = Math.round(track.scrollLeft / track.clientWidth);
+      dots.forEach((d, i) => d.setAttribute('aria-selected', String(i === index)));
+    };
+    const restart = () => {
+      clearInterval(timer);
+      if (!reduced) timer = window.setInterval(() => go(index + 1), 6000);
+    };
+    track.addEventListener('scroll', () => requestAnimationFrame(mark), { passive: true });
+    root.querySelector('[data-prev]')!.addEventListener('click', () => { go(index - 1); restart(); });
+    root.querySelector('[data-next]')!.addEventListener('click', () => { go(index + 1); restart(); });
+    dots.forEach((d, i) => d.addEventListener('click', () => { go(i); restart(); }));
+    root.addEventListener('pointerenter', () => clearInterval(timer));
+    root.addEventListener('pointerleave', restart);
+    root.addEventListener('focusin', () => clearInterval(timer));
+    restart();
+  });
+</script>
+
+<style>
+  .slider { position: relative; border-radius: calc(var(--radius) + 6px); overflow: hidden; background: var(--surface); border: 1px solid var(--line); }
+  .track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .track::-webkit-scrollbar { display: none; }
+  .slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; }
+  .slide img { width: 100%; aspect-ratio: 1104 / 524; object-fit: cover; }
+  .arrow {
+    position: absolute; top: 50%; translate: 0 -50%; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
+    background: rgba(11, 12, 15, 0.55); border: 1px solid var(--line-strong); color: #fff; backdrop-filter: blur(8px);
+    opacity: 0; transition: opacity 0.3s, background-color 0.2s, transform 0.2s;
+  }
+  .arrow svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .arrow:hover { background: var(--accent); transform: scale(1.06); }
+  .prev { left: 16px; } .next { right: 16px; }
+  .slider:hover .arrow, .arrow:focus-visible { opacity: 1; }
+  .dots { position: absolute; left: 50%; bottom: 14px; translate: -50% 0; display: flex; gap: 6px; padding: 6px 8px; border-radius: 999px; background: rgba(11, 12, 15, 0.5); backdrop-filter: blur(8px); }
+  .dots button { width: 26px; height: 18px; padding: 0; border: 0; background: none; display: grid; place-items: center; }
+  .dots span { display: block; width: 100%; height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.3); transition: background 0.3s; }
+  .dots [aria-selected='true'] span { background: var(--heat); }
+  @media (max-width: 640px) {
+    .slide img { aspect-ratio: 867 / 1130; }
+    .arrow { display: none; }
+  }
+</style>

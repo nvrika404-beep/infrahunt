@@ -1,0 +1,85 @@
+---
+import type { Product } from '../lib/catalog';
+
+interface Props { product: Product; eager?: boolean }
+const { product: p, eager = false } = Astro.props;
+const [first, second] = p.images;
+---
+<article class="card" data-glow>
+  <a class="media" href={p.url} aria-label={p.name}>
+    {p.copy.badge && <span class="chip chip-heat badge">{p.copy.badge}</span>}
+    <img class="img-main" src={first.thumb} width={first.w} height={first.h} alt={p.name} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+    {second && <img class="img-alt" src={second.thumb} width={second.w} height={second.h} alt="" loading="lazy" decoding="async" />}
+  </a>
+  <div class="body">
+    <p class="line">{p.category.title}</p>
+    <h3><a href={p.url}>{p.name}</a></h3>
+    <ul class="specs">
+      {p.copy.highlights.slice(0, 3).map(([k, v]) => <li><span>{k}</span><b>{v}</b></li>)}
+    </ul>
+    <div class="foot">
+      <div class="price-box">
+        <span class="price">{p.priceText}</span>
+        <span class:list={['status', { 'is-instock': p.availability === 'InStock' }]}>{p.availabilityText}</span>
+      </div>
+      <div class="buttons">
+        <button class="round" type="button" data-toggle-compare={p.slug} aria-pressed="false" title="Сравнить" aria-label={`Сравнить ${p.name}`}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7" /></svg>
+        </button>
+        <button class="round round-cart" type="button" data-add-cart={p.slug} title="В корзину" aria-label={`Добавить ${p.name} в корзину`}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.3 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2" /><path d="M14 10v4M12 12h4" /></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    --mx: 50%; --my: 0%;
+    position: relative; display: flex; flex-direction: column; border-radius: var(--radius); background: var(--surface);
+    border: 1px solid var(--line); overflow: hidden; isolation: isolate;
+    transition: transform 0.45s var(--ease), border-color 0.3s, box-shadow 0.45s var(--ease);
+  }
+  /* Тепловое пятно под курсором и «раскалённая» рамка. */
+  .card::before {
+    content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity 0.4s;
+    background: radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 90, 31, 0.16), rgba(212, 20, 90, 0.08) 40%, transparent 70%);
+  }
+  .card::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; opacity: 0; transition: opacity 0.4s;
+    background: radial-gradient(300px circle at var(--mx) var(--my), #ffc23d, #ff5a1f 30%, transparent 65%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 122, 26, 0.12); }
+  .card:hover::before, .card:hover::after { opacity: 1; }
+
+  .media { position: relative; display: block; aspect-ratio: 4 / 3; background: radial-gradient(70% 70% at 50% 60%, #22252e, transparent 70%); }
+  .media img { position: absolute; inset: 22px; width: calc(100% - 44px); height: calc(100% - 44px); object-fit: contain; transition: opacity 0.5s var(--ease), transform 0.6s var(--ease), filter 0.5s; filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.55)); }
+  .img-alt { opacity: 0; transform: scale(0.96); }
+  .card:hover .img-main { transform: scale(1.06) rotate(-1.5deg); }
+  .card:hover .media:has(.img-alt) .img-main { opacity: 0; }
+  .card:hover .img-alt { opacity: 1; transform: scale(1.04); }
+  .badge { position: absolute; top: 14px; left: 14px; z-index: 1; }
+
+  .body { display: flex; flex-direction: column; gap: 10px; padding: 4px 20px 20px; flex: 1; }
+  .line { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+  h3 { font-size: 18px; }
+  h3 a::after { content: ''; position: absolute; inset: 0; z-index: 0; }
+  .specs { list-style: none; margin: 2px 0 0; padding: 0; display: grid; gap: 5px; font-size: 13.5px; }
+  .specs li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-bottom: 5px; }
+  .specs span { color: var(--muted); }
+  .specs b { font-weight: 600; text-align: right; }
+  .foot { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin-top: auto; padding-top: 10px; }
+  .price-box { display: flex; flex-direction: column; gap: 3px; }
+  .price { font-family: var(--display); font-size: 19px; font-weight: 600; white-space: nowrap; }
+  .buttons { position: relative; z-index: 1; display: flex; gap: 8px; }
+  .round { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--surface-2); transition: background-color 0.2s, border-color 0.2s, color 0.2s, transform 0.2s; }
+  .round:hover { border-color: var(--text); transform: translateY(-2px); }
+  .round svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .round.is-active { border-color: var(--gold); color: var(--gold); }
+  .round-cart { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .round-cart:hover { background: #ff554b; border-color: #ff554b; }
+  @media (max-width: 560px) { .media { aspect-ratio: 16 / 10; } .media img { inset: 14px; width: calc(100% - 28px); height: calc(100% - 28px); } }
+  @media (hover: none) { .card:hover { transform: none; } .card:hover .img-main { transform: none; opacity: 1 !important; } .card:hover .img-alt { opacity: 0; } }
+</style>

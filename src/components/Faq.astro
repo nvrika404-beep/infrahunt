@@ -1,0 +1,26 @@
+---
+interface Props { items: [string, string][] }
+const { items } = Astro.props;
+---
+<div class="faq">
+  {items.map(([q, a], i) => (
+    <details open={i === 0}>
+      <summary>{q}<span aria-hidden="true"></span></summary>
+      <p>{a}</p>
+    </details>
+  ))}
+</div>
+
+<style>
+  .faq { display: grid; gap: 10px; }
+  details { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); transition: border-color 0.3s; }
+  details[open], details:hover { border-color: var(--line-strong); }
+  summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 20px; cursor: pointer; font-weight: 700; font-size: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary span { position: relative; flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line-strong); transition: transform 0.3s var(--ease), background-color 0.3s; }
+  summary span::before, summary span::after { content: ''; position: absolute; left: 50%; top: 50%; width: 11px; height: 1.6px; background: currentColor; translate: -50% -50%; }
+  summary span::after { rotate: 90deg; transition: rotate 0.3s var(--ease); }
+  details[open] summary span { background: var(--accent); border-color: var(--accent); }
+  details[open] summary span::after { rotate: 0deg; }
+  details p { padding: 0 20px 20px; color: #cfcdc8; }
+</style>

@@ -1,0 +1,155 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { clientData, products } from '../lib/catalog';
+
+const data = clientData();
+const presets = [
+  { label: 'Kaban 650 или Moskit 650', slugs: 'kaban-650-lrf,moskit-650-lrf' },
+  { label: 'Все Kaban', slugs: 'kaban-335-lrf,kaban-350-lrf,kaban-650-lrf,kaban-650-lrf-pro' },
+  { label: 'Флагманы Dovod PRO', slugs: 'dovod-pro-660-lrf,dovod-pro-1275-lrf,kaban-650-lrf-pro' },
+  { label: 'Бинокли Snegir', slugs: 'snegir-640,snegir-1280' },
+  { label: 'Дальномеры Strekoza', slugs: 'strekoza-brf-2000,strekoza-brf-4000' },
+];
+---
+<Base title="Сравнение тепловизоров RikaNV" description="Сравните характеристики тепловизионных прицелов и приборов RikaNV: матрица, оптика, дисплей, дальномер, питание." noindex>
+  <div class="wrap">
+    <Breadcrumbs items={[{ href: '/', label: 'Главная' }, { href: '/compare/', label: 'Сравнение' }]} />
+    <header class="head">
+      <h1>Сравнение приборов</h1>
+      <p class="muted">До четырёх моделей рядом. Отметьте «Только отличия», чтобы скрыть одинаковые строки.</p>
+    </header>
+
+    <div class="controls">
+      <div class="presets" role="group" aria-label="Готовые сравнения">
+        {presets.map((p) => <button type="button" class="preset" data-preset={p.slugs}>{p.label}</button>)}
+      </div>
+      <div class="right">
+        <label class="add">
+          <span class="visually-hidden">Добавить прибор</span>
+          <select data-add>
+            <option value="">+ Добавить прибор</option>
+            {products.map((p) => <option value={p.slug}>{p.name}</option>)}
+          </select>
+        </label>
+        <label class="diff"><input type="checkbox" data-diff /> <span>Только отличия</span></label>
+      </div>
+    </div>
+
+    <div class="empty" data-empty hidden>
+      <p>Список сравнения пуст. Выберите готовое сравнение выше или добавьте приборы кнопкой <b>«Сравнить»</b> в каталоге.</p>
+      <a class="btn btn-primary" href="/catalog/">Перейти в каталог</a>
+    </div>
+
+    <div class="table-wrap" data-table-wrap hidden>
+      <table class="compare" data-table></table>
+    </div>
+  </div>
+  <script type="application/json" id="compare-data" set:html={JSON.stringify(data)} />
+</Base>
+
+<script>
+  import { store } from '../scripts/store';
+
+  type Item = { slug: string; name: string; url: string; img: string; priceText: string; category: string; groups: { title: string; rows: [string, string][] }[] };
+  const all: Item[] = JSON.parse(document.getElementById('compare-data')!.textContent!);
+  const table = document.querySelector<HTMLTableElement>('[data-table]')!;
+  const wrap = document.querySelector<HTMLElement>('[data-table-wrap]')!;
+  const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+  const diff = document.querySelector<HTMLInputElement>('[data-diff]')!;
+  const add = document.querySelector<HTMLSelectElement>('[data-add]')!;
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+  function render() {
+    const items = store.compare().map((slug) => all.find((p) => p.slug === slug)).filter(Boolean) as Item[];
+    empty.hidden = items.length > 0;
+    wrap.hidden = items.length === 0;
+    [...add.options].forEach((o) => (o.disabled = Boolean(o.value) && (items.some((i) => i.slug === o.value) || items.length >= 4)));
+    if (!items.length) return;
+    // Строки объединяем по разделу и названию, порядок — как у первого прибора, где строка встречается.
+    const sections: { title: string; keys: string[] }[] = [];
+    const values = new Map<string, string[]>();
+    items.forEach((item, col) => {
+      for (const g of item.groups) {
+        let section = sections.find((s) => s.title === g.title);
+        if (!section) sections.push((section = { title: g.title, keys: [] }));
+        g.rows.forEach(([name, value], n) => {
+          let key = `${g.title}\u0000${name}`;
+          while (values.has(key) && values.get(key)![col] !== undefined) key += '\u0001'; // повтор названия в разделе
+          if (!values.has(key)) { values.set(key, []); section!.keys.push(key); }
+          values.get(key)![col] = value;
+        });
+      }
+    });
+    let html = '<thead><tr><th class="corner" scope="col">Модель</th>';
+    for (const item of items) {
+      html += `<th scope="col"><div class="head-cell"><button type="button" class="remove" data-remove="${item.slug}" aria-label="Убрать ${esc(item.name)} из сравнения">×</button>
+        <a href="${item.url}"><img src="${item.img}" alt="" width="140" height="100" loading="lazy"><span>${esc(item.name)}</span></a>
+        <small>${esc(item.category)}</small><b>${esc(item.priceText)}</b>
+        <button type="button" class="btn btn-primary btn-sm" data-add-cart="${item.slug}">В корзину</button></div></th>`;
+    }
+    html += '</tr></thead><tbody>';
+    for (const section of sections) {
+      const rows = section.keys.map((key) => {
+        const cells = items.map((_, i) => values.get(key)![i] ?? '—');
+        const same = cells.every((c) => c === cells[0]);
+        return { name: key.split('\u0000')[1].replace(/\u0001/g, ''), cells, same };
+      }).filter((r) => !(diff.checked && r.same && items.length > 1));
+      if (!rows.length) continue;
+      html += `<tr class="section-row"><th colspan="${items.length + 1}" scope="colgroup">${esc(section.title)}</th></tr>`;
+      for (const r of rows) {
+        html += `<tr class="${r.same || items.length < 2 ? '' : 'is-diff'}"><th scope="row">${esc(r.name)}</th>${r.cells.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`;
+      }
+    }
+    table.innerHTML = html + '</tbody>';
+  }
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const remove = t.closest<HTMLElement>('[data-remove]');
+    if (remove) store.setCompare(store.compare().filter((s) => s !== remove.dataset.remove));
+    const preset = t.closest<HTMLElement>('[data-preset]');
+    if (preset) store.setCompare(preset.dataset.preset!.split(','));
+  });
+  add.addEventListener('change', () => {
+    if (add.value) store.setCompare([...store.compare(), add.value]);
+    add.value = '';
+  });
+  diff.addEventListener('change', render);
+  window.addEventListener('ih:store', render);
+  window.addEventListener('storage', render);
+  render();
+</script>
+
+<style>
+  .head { display: grid; gap: 12px; padding: 18px 0 24px; }
+  .controls { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  .presets { display: flex; gap: 8px; flex-wrap: wrap; }
+  .preset { padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line-strong); background: transparent; font-weight: 600; font-size: 14px; transition: border-color 0.2s, background-color 0.2s; }
+  .preset:hover { border-color: var(--accent-2); background: rgba(255, 122, 26, 0.08); }
+  .right { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .add select { padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); font-weight: 600; max-width: 260px; }
+  .diff { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; cursor: pointer; }
+  .diff input { width: 18px; height: 18px; accent-color: var(--accent); }
+  .empty { display: grid; justify-items: start; gap: 16px; padding: 32px; border: 1px dashed var(--line-strong); border-radius: var(--radius); color: var(--muted); }
+  .empty[hidden], .table-wrap[hidden] { display: none; }
+
+  .table-wrap { overflow: auto; max-height: calc(100dvh - 140px); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .table-wrap :global(table) { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 640px; font-size: 14px; }
+  .table-wrap :global(th), .table-wrap :global(td) { padding: 11px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  .table-wrap :global(tbody th[scope='row']) { position: sticky; left: 0; z-index: 1; background: var(--surface); color: var(--muted); font-weight: 600; min-width: 170px; max-width: 220px; }
+  .table-wrap :global(thead th) { position: sticky; top: 0; z-index: 2; background: var(--surface-2); min-width: 200px; }
+  .table-wrap :global(thead .corner) { left: 0; z-index: 3; min-width: 170px; vertical-align: bottom; color: var(--faint); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .table-wrap :global(.head-cell) { position: relative; display: flex; flex-direction: column; gap: 6px; }
+  .table-wrap :global(.head-cell a) { display: flex; flex-direction: column; gap: 8px; font-family: var(--display); font-weight: 600; font-size: 15px; }
+  .table-wrap :global(.head-cell a:hover) { color: var(--gold); }
+  .table-wrap :global(.head-cell img) { height: 86px; width: 100%; object-fit: contain; transition: transform 0.4s var(--ease); }
+  .table-wrap :global(.head-cell a:hover img) { transform: scale(1.06); }
+  .table-wrap :global(.head-cell small) { color: var(--muted); font-size: 12px; }
+  .table-wrap :global(.head-cell b) { font-family: var(--display); font-weight: 600; font-size: 17px; }
+  .table-wrap :global(.remove) { position: absolute; right: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--surface); font-size: 18px; line-height: 1; }
+  .table-wrap :global(.remove:hover) { background: var(--accent); border-color: var(--accent); }
+  .table-wrap :global(.section-row th) { background: var(--bg-2); font-family: var(--display); font-weight: 600; font-size: 14px; color: var(--accent-2); position: sticky; left: 0; }
+  .table-wrap :global(tr.is-diff td) { background: rgba(255, 194, 61, 0.05); font-weight: 600; }
+  .table-wrap :global(tbody tr:hover td), .table-wrap :global(tbody tr:hover th[scope='row']) { background: rgba(255, 90, 31, 0.07); }
+</style>

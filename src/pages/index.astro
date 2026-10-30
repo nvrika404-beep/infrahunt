@@ -1,0 +1,151 @@
+---
+import Base from '../layouts/Base.astro';
+import HeroSlider from '../components/HeroSlider.astro';
+import CategoryTiles from '../components/CategoryTiles.astro';
+import ProductCard from '../components/ProductCard.astro';
+import Faq from '../components/Faq.astro';
+import Consult from '../components/Consult.astro';
+import { productBySlug } from '../lib/catalog';
+import { faq } from '../data/faq';
+
+const featured = ['kaban-650-lrf', 'moskit-650-lrf', 'kaban-650-lrf-pro', 'dovod-pro-660-lrf', 'moskit-335-lrf', 'sinica-630', 'snegir-640', 'strekoza-brf-2000']
+  .map((slug) => productBySlug(slug)!);
+const kaban = productBySlug('kaban-650-lrf')!;
+const moskit = productBySlug('moskit-650-lrf')!;
+const versus = [
+  ['Матрица', '640×512, ≤15 мК', '640×512, ≤18 мК'],
+  ['Дисплей', 'AMOLED 1920×1440', 'AMOLED 1024×768'],
+  ['Объектив', 'германий, 50 мм F0.9', 'халькогенид, 50 мм F0.9'],
+  ['Работа от батареи', 'до 6 ч', 'до 7 ч'],
+  ['Дальномер', 'до 1200 м', 'до 1200 м'],
+];
+const trust = [
+  ['Официальная продукция', 'Приборы RikaNV с гарантией производителя'],
+  ['Подбор под задачу', 'Охотник-консультант на связи по телефону и в мессенджерах'],
+  ['Доставка по России', 'СДЭК курьером и в пункт выдачи, Почта России'],
+  ['Оплата по счёту', 'После подтверждения наличия и стоимости'],
+];
+---
+<Base
+  title="InfraHunt — тепловизионные прицелы RikaNV Kaban, Moskit, Dovod PRO"
+  description="InfraHunt — тепловизионные прицелы RikaNV Kaban, Moskit, Dovod PRO с дальномером, тепловизоры, насадки Ehidna, бинокли Snegir и дальномеры Strekoza. Сравнение моделей, консультация, доставка по России."
+  jsonLd={[{
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  }]}
+>
+  <div class="wrap hero">
+    <HeroSlider />
+    <div class="intro">
+      <div>
+        <p class="eyebrow">Дилер RikaNV</p>
+        <h1>Тепловизионные прицелы и приборы <span class="heat-text">RikaNV</span></h1>
+      </div>
+      <div class="intro-side">
+        <p class="lead">Новая линейка 2026 года: прицелы Kaban и Moskit с дальномером и баллистикой, флагманы Dovod PRO, монокуляр Sinica, мультиспектральные бинокли Snegir и дальномеры Strekoza. Поможем выбрать и отправим по всей России.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="/catalog/">Смотреть каталог</a>
+          <a class="btn btn-ghost" href="/compare/" data-compare-set="kaban-650-lrf,moskit-650-lrf,dovod-pro-660-lrf">Сравнить прицелы</a>
+        </div>
+      </div>
+    </div>
+    <ul class="trust">
+      {trust.map(([title, text]) => <li><b>{title}</b><span>{text}</span></li>)}
+    </ul>
+  </div>
+
+  <section class="section wrap" aria-labelledby="cats">
+    <div class="section-head">
+      <div><p class="eyebrow">Каталог</p><h2 id="cats">Выберите тип прибора</h2></div>
+      <p>От прицела для загонной охоты до охлаждаемой насадки для стрельбы на километры.</p>
+    </div>
+    <CategoryTiles />
+  </section>
+
+  <section class="section wrap" aria-labelledby="popular">
+    <div class="section-head">
+      <div><p class="eyebrow">Новинки и хиты</p><h2 id="popular">Популярные модели</h2></div>
+      <a class="btn btn-ghost btn-sm" href="/catalog/">Весь каталог</a>
+    </div>
+    <div class="grid">
+      {featured.map((p, i) => <ProductCard product={p} eager={i < 4} />)}
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="versus">
+    <div class="versus" data-glow>
+      <div class="versus-head">
+        <p class="eyebrow">Помогаем выбрать</p>
+        <h2 id="versus">Kaban или Moskit?</h2>
+        <p class="muted">Обе новинки — с матрицей 640×512, дальномером и баллистикой. Kaban — за картинку в окуляре и германиевую оптику, Moskit — за цену и время работы.</p>
+        <a class="btn btn-primary" href="/compare/" data-compare-set="kaban-650-lrf,moskit-650-lrf">Сравнить все характеристики</a>
+      </div>
+      <div class="versus-table" role="table" aria-label="Kaban 650 LRF и Moskit 650 LRF">
+        <div class="vt-row vt-headrow" role="row">
+          <span role="columnheader"></span>
+          <a role="columnheader" href={kaban.url}><img src={kaban.images[0].thumb} alt="" width="160" height="100" loading="lazy" />Kaban 650 LRF<small>{kaban.priceText}</small></a>
+          <a role="columnheader" href={moskit.url}><img src={moskit.images[0].thumb} alt="" width="160" height="100" loading="lazy" />Moskit 650 LRF<small>{moskit.priceText}</small></a>
+        </div>
+        {versus.map(([k, a, b]) => (
+          <div class="vt-row" role="row"><span role="rowheader">{k}</span><span role="cell">{a}</span><span role="cell">{b}</span></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="faq-title">
+    <div class="faq-grid">
+      <div>
+        <p class="eyebrow">Вопросы</p>
+        <h2 id="faq-title">Частые вопросы</h2>
+        <p class="muted faq-note">Не нашли ответ — позвоните или напишите, ответим в течение дня.</p>
+      </div>
+      <Faq items={faq} />
+    </div>
+  </section>
+
+  <section class="wrap"><Consult /></section>
+</Base>
+
+<style>
+  .hero { padding-top: 22px; }
+  .intro { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: end; margin-top: 42px; }
+  .intro h1 { margin-top: 14px; }
+  .lead { color: #cfcdc8; font-size: 17px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+  .trust { list-style: none; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .trust li { display: flex; flex-direction: column; gap: 4px; padding: 20px 22px; background: var(--bg); transition: background-color 0.3s; }
+  .trust li:hover { background: var(--surface); }
+  .trust b { font-size: 15px; }
+  .trust b::before { content: ''; display: block; width: 26px; height: 3px; border-radius: 3px; background: var(--heat); margin-bottom: 12px; }
+  .trust span { color: var(--muted); font-size: 14px; }
+
+  .versus { --mx: 30%; --my: 20%; position: relative; display: grid; grid-template-columns: 1fr 1.25fr; gap: 40px; padding: clamp(24px, 4vw, 48px); border-radius: calc(var(--radius) + 8px); border: 1px solid var(--line); overflow: hidden; isolation: isolate;
+    background: radial-gradient(600px circle at var(--mx) var(--my), rgba(212, 20, 90, 0.18), transparent 60%), var(--surface); }
+  .versus-head { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+  .versus-table { display: grid; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: rgba(0, 0, 0, 0.25); }
+  .vt-row { display: grid; grid-template-columns: 0.8fr 1fr 1fr; border-top: 1px solid var(--line); }
+  .vt-row:first-child { border-top: 0; }
+  .vt-row > * { padding: 13px 16px; font-size: 14.5px; }
+  .vt-row > [role='rowheader'] { color: var(--muted); }
+  .vt-headrow a { display: flex; flex-direction: column; gap: 6px; font-family: var(--display); font-weight: 600; font-size: 15px; transition: color 0.2s; }
+  .vt-headrow a:hover { color: var(--gold); }
+  .vt-headrow img { height: 84px; width: auto; object-fit: contain; transition: transform 0.4s var(--ease); }
+  .vt-headrow a:hover img { transform: translateX(6px) rotate(-2deg); }
+  .vt-headrow small { font-family: var(--font); color: var(--muted); font-weight: 600; font-size: 13px; }
+
+  .faq-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 48px; }
+  .faq-note { margin-top: 14px; }
+
+  @media (max-width: 960px) {
+    .intro, .versus, .faq-grid { grid-template-columns: 1fr; gap: 24px; }
+    .trust { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .intro { margin-top: 28px; }
+    .trust { grid-template-columns: 1fr; }
+    .vt-row > * { padding: 11px 10px; font-size: 13px; }
+    .vt-headrow img { height: 60px; }
+  }
+</style>

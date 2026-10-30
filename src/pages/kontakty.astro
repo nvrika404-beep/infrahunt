@@ -1,0 +1,17 @@
+---
+import TextPage from '../components/TextPage.astro';
+import { site } from '../data/site';
+---
+<TextPage title="Контакты InfraHunt — телефоны, WhatsApp, Telegram" h1="Контакты" label="Контакты" path="/kontakty/"
+  description={`Контакты InfraHunt: консультация по тепловизорам ${site.phones[0].display}, WhatsApp, Telegram, почта ${site.email}. ${site.address.region}, Анапский район.`}>
+  <div class="cards">
+    {site.phones.map((p) => <div class="card"><small>{p.label}</small><b><a href={p.href}>{p.display}</a></b></div>)}
+    <div class="card"><small>Почта</small><b><a href={`mailto:${site.email}`}>{site.email}</a></b></div>
+    <div class="card"><small>Мессенджеры</small><b><a href={site.whatsapp} target="_blank" rel="noopener">WhatsApp</a> · <a href={site.telegram} target="_blank" rel="noopener">Telegram</a></b></div>
+    <div class="card"><small>Соцсети</small><b><a href={site.vk} target="_blank" rel="noopener">ВКонтакте</a> · <a href={site.youtube} target="_blank" rel="noopener">YouTube</a></b></div>
+  </div>
+  <h2>Адрес</h2>
+  <p>{site.address.full}</p>
+  <h2>Реквизиты</h2>
+  <p>{site.legal.name}<br />ИНН {site.legal.inn}<br />ОГРНИП {site.legal.ogrnip}</p>
+</TextPage>

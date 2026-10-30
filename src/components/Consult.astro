@@ -1,0 +1,33 @@
+---
+import { site } from '../data/site';
+interface Props { product?: string }
+const { product } = Astro.props;
+const text = encodeURIComponent(product ? `Здравствуйте! Интересует ${product}.` : 'Здравствуйте! Помогите выбрать тепловизор.');
+---
+<aside class="consult" data-glow>
+  <div class="text">
+    <p class="eyebrow">Консультация</p>
+    <h2>Не уверены, что выбрать?</h2>
+    <p class="muted">Расскажите, где и на кого охотитесь, какой у вас карабин — подберём прибор и кронштейн, ответим на вопросы по настройке.</p>
+  </div>
+  <div class="ways">
+    <a class="way" href={site.phones[0].href}><small>Позвонить</small>{site.phones[0].display}</a>
+    <a class="way" href={`${site.whatsapp}?text=${text}`} target="_blank" rel="noopener"><small>Написать</small>WhatsApp</a>
+    <a class="way" href={site.telegram} target="_blank" rel="noopener"><small>Наша группа</small>Telegram</a>
+  </div>
+</aside>
+
+<style>
+  .consult {
+    --mx: 80%; --my: 50%;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; padding: clamp(24px, 4vw, 48px); border-radius: calc(var(--radius) + 8px);
+    border: 1px solid rgba(255, 122, 26, 0.25); overflow: hidden;
+    background: radial-gradient(700px circle at var(--mx) var(--my), rgba(255, 90, 31, 0.22), transparent 60%), linear-gradient(135deg, #1a0f12, #121318 60%);
+  }
+  .text { display: flex; flex-direction: column; gap: 14px; }
+  .ways { display: grid; gap: 10px; }
+  .way { display: flex; flex-direction: column; padding: 16px 20px; border-radius: var(--radius-sm); border: 1px solid var(--line-strong); background: rgba(0, 0, 0, 0.25); font-weight: 700; font-size: 18px; transition: border-color 0.25s, transform 0.3s var(--ease), background-color 0.25s; }
+  .way small { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .way:hover { border-color: var(--gold); transform: translateX(6px); background: rgba(255, 194, 61, 0.06); }
+  @media (max-width: 860px) { .consult { grid-template-columns: 1fr; } }
+</style>
