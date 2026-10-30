@@ -1,6 +1,6 @@
 # InfraHunt — сайт дилера RikaNV
 
-Каталог тепловизионной оптики RikaNV: прицелы Kaban, Moskit, Dovod PRO, монокуляр Sinica, насадка Ehidna, бинокли Snegir, дальномеры Strekoza и раздел дневной оптики «скоро».
+Каталог тепловизионной оптики RikaNV: прицелы Kaban, Moskit, Dovod PRO, монокуляр Sinica, бинокли Snegir, дальномеры Strekoza и раздел дневной оптики «скоро».
 
 Сайт собирается в статический HTML на [Astro](https://astro.build): каждая страница — готовый HTML, который сразу видят Яндекс и Google. Корзина и сравнение работают в браузере посетителя, заказ уходит в Telegram через Cloudflare Pages Function.
 

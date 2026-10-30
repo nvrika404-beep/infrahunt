@@ -6,7 +6,6 @@ import { productsIn, productBySlug } from '../lib/catalog';
 const cover: Record<string, string> = {
   'teplovizionnye-pricely': 'kaban-650-lrf',
   'teplovizory-nablyudeniya': 'sinica-630',
-  'teplovizionnye-nasadki': 'ehidna-g-ec-1',
   binokli: 'snegir-640',
   dalnomery: 'strekoza-brf-4000',
 };
@@ -58,9 +57,8 @@ const plural = (n: number) => (n === 1 ? 'модель' : n < 5 ? 'модели'
   }
   .wide img { width: 88%; height: 72%; right: -4%; }
   .tile:hover img { transform: scale(1.07) rotate(-2deg); filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6)) sepia(1) saturate(4) hue-rotate(-28deg) brightness(1.05) contrast(1.1); }
-  .soon { border-style: dashed; grid-column: 1 / -1; min-height: 150px; }
-  .soon .text { max-width: 60%; }
-  .soon-art { position: absolute; right: 24px; bottom: 50%; translate: 0 50%; width: 200px; fill: none; stroke: var(--faint); stroke-width: 3; stroke-linecap: round; transition: stroke 0.4s; }
+  .soon { border-style: dashed; }
+  .soon-art { position: absolute; right: 20px; bottom: 22px; width: 150px; fill: none; stroke: var(--faint); stroke-width: 3; stroke-linecap: round; transition: stroke 0.4s; }
   .soon:hover .soon-art { stroke: var(--gold); }
   @media (max-width: 1024px) { .tiles { grid-template-columns: repeat(2, 1fr); } .tile.wide { grid-row: auto; min-height: 320px; } }
   @media (max-width: 560px) {
@@ -73,7 +71,6 @@ const plural = (n: number) => (n === 1 ? 'модель' : n < 5 ? 'модели'
     .go { font-size: 13px; }
     .tile img { width: 64%; height: 44%; right: -8%; bottom: -6%; }
     .wide img { width: 70%; height: 60%; }
-    .soon .text { max-width: 60%; }
-    .soon-art { width: 120px; right: 14px; }
+    .soon-art { width: 110px; right: 12px; bottom: 16px; }
   }
 </style>

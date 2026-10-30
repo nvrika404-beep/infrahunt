@@ -13,7 +13,7 @@
 /product/teplovizor-rikanv-surok-m25-alfa /catalog/teplovizory-nablyudeniya/ 301
 /product/teplovizor-rikanv-surok-m25 /catalog/teplovizory-nablyudeniya/ 301
 /product/rikanv-surok-m35-lrf-2 /catalog/teplovizory-nablyudeniya/ 301
-/product/teplovizionnaya-nasadka-longot-mate-y050-mah50 /catalog/teplovizionnye-nasadki/ 301
+/product/teplovizionnaya-nasadka-longot-mate-y050-mah50 /catalog/ 301
 /product/teplovizionnyy-pritsel-rikanv-lesnik2-660l /catalog/teplovizionnye-pricely/ 301
 /product/teplovizionnyy-pritsel-rikanv-lesnik2-650l /catalog/teplovizionnye-pricely/ 301
 /product/teplovizionnyy-pritsel-rikanv-lesnik2-335l /catalog/teplovizionnye-pricely/ 301
@@ -33,7 +33,9 @@
 /collection/rikanv-surok-m /catalog/teplovizory-nablyudeniya/ 301
 /collection/rikanv-hypnose2 /catalog/teplovizory-nablyudeniya/ 301
 /collection/rikanv-snegir /catalog/binokli/ 301
-/collection/rikanv-ehidna /catalog/teplovizionnye-nasadki/ 301
+/collection/rikanv-ehidna /catalog/ 301
+/catalog/teplovizionnye-nasadki/ /catalog/ 301
+/product/rikanv-ehidna-g-ec-1/ /catalog/ 301
 /collection/* /catalog/ 301
 /blogs/* / 301
 /page/* / 301

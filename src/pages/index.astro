@@ -14,7 +14,7 @@ import { clips, photos, reviews } from '../data/media';
 
 const featured = ['kaban-650-lrf', 'moskit-650-lrf', 'kaban-650-lrf-pro', 'dovod-pro-660-lrf', 'moskit-335-lrf', 'sinica-630', 'snegir-640', 'strekoza-brf-2000']
   .map((slug) => productBySlug(slug)!);
-const homeClips = ['kaban-650-boar-shot', '16841-v0', '16649-v3', 'kaban-650-boar-28m', '16275-v1', '16494-v0'].map((id) => clips.find((c) => c.id === id)!);
+const homeClips = ['kaban-650-boar-shot', '16841-v0', '16649-v3', 'kaban-650-boar-28m', '16275-v1', '16773-v2'].map((id) => clips.find((c) => c.id === id)!);
 const homeReviews = ['9mudS-DqfW8', 'icvMXAZno3g', 'xJ95-S7H7XQ', '_QK3hmjX774'].map((id) => reviews.find((r) => r.youtube === id)!);
 const kaban = productBySlug('kaban-650-lrf')!;
 const moskit = productBySlug('moskit-650-lrf')!;
@@ -34,7 +34,7 @@ const trust = [
 ---
 <Base
   title="InfraHunt — тепловизионные прицелы RikaNV Kaban, Moskit, Dovod PRO"
-  description="InfraHunt — тепловизионные прицелы RikaNV Kaban, Moskit, Dovod PRO с дальномером, тепловизоры, насадки Ehidna, бинокли Snegir и дальномеры Strekoza. Сравнение моделей, консультация, доставка по России."
+  description="InfraHunt — тепловизионные прицелы RikaNV Kaban, Moskit, Dovod PRO с дальномером, монокуляры Sinica, бинокли Snegir и дальномеры Strekoza. Сравнение моделей, консультация, доставка по России."
   jsonLd={[{
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -64,7 +64,7 @@ const trust = [
   <section class="section wrap" aria-labelledby="cats">
     <div class="section-head">
       <div><p class="eyebrow">Каталог</p><h2 id="cats">Выберите тип прибора</h2></div>
-      <p>От прицела для загонной охоты до охлаждаемой насадки для стрельбы на километры.</p>
+      <p>От прицела для загонной охоты до бинокля и баллистического дальномера для стрельбы на километры.</p>
     </div>
     <CategoryTiles />
   </section>
