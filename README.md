@@ -41,6 +41,7 @@ Cloudflare → проект → **Custom domains** → `infrahunt.ru` и `www.in
 - **Тексты товаров, разделы, линейки**: `src/data/content.ts`.
 - **Контакты и реквизиты**: `src/data/site.ts`.
 - **Вопросы и ответы на главной**: `src/data/faq.ts`.
+- **Видео, обзоры и фото**: `src/data/media.ts`. Ролики с прицелов лежат в `public/media/video/` (MP4 до ~4 МБ, 848 px), фото — в `public/media/photos/`, обложки обзоров — в `public/media/reviews/`. Обзоры встраиваются с RuTube, если ссылка есть, иначе с YouTube.
 - **Характеристики и фото**: `src/data/catalog.json`, фото — `public/img/products/`.
 
 Локальный запуск: `npm install`, затем `npm run dev`.

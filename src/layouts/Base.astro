@@ -5,6 +5,7 @@ import '@fontsource/unbounded/600.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import MediaDialog from '../components/MediaDialog.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -94,6 +95,7 @@ const organization = {
       <slot />
     </main>
     <Footer />
+    <MediaDialog />
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="../scripts/store.ts"></script>
   </body>

@@ -1,0 +1,26 @@
+---
+import { photoSrc, type Photo } from '../data/media';
+interface Props { items: Photo[]; group?: string }
+const { items, group = 'photos' } = Astro.props;
+---
+<div class="gallery">
+  {items.map((p) => (
+    <button type="button" class="photo" data-group={group} data-line={p.line ?? ''}
+      data-media={JSON.stringify({ type: 'image', src: photoSrc(p), title: p.title, links: [{ label: 'Пост в Telegram', href: p.post }] })}>
+      <img src={photoSrc(p)} width={p.w} height={p.h} alt={p.title} loading="lazy" decoding="async" />
+      <span class="cap">{p.title}</span>
+    </button>
+  ))}
+</div>
+
+<style>
+  .gallery { columns: 4 240px; column-gap: 14px; }
+  .photo { position: relative; display: block; width: 100%; margin: 0 0 14px; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; break-inside: avoid; background: #000; color: #fff; transition: border-color 0.3s, transform 0.4s var(--ease); }
+  .photo img { width: 100%; transition: transform 0.7s var(--ease), filter 0.5s; }
+  .photo:hover { border-color: rgba(255, 122, 26, 0.5); transform: translateY(-3px); }
+  .photo:hover img { transform: scale(1.06); filter: saturate(1.1) contrast(1.05); }
+  .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 14px 12px; text-align: left; font-size: 13.5px; font-weight: 600; line-height: 1.35;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85)); transform: translateY(35%); opacity: 0.85; transition: transform 0.4s var(--ease), opacity 0.3s; }
+  .photo:hover .cap { transform: none; opacity: 1; }
+  .photo[hidden] { display: none; }
+</style>

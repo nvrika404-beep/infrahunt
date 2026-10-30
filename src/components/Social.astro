@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+
+interface Props { size?: 'sm' | 'md'; labels?: boolean; text?: string }
+const { size = 'md', labels = true, text } = Astro.props;
+const wa = text ? `${site.whatsapp}?text=${encodeURIComponent(text)}` : site.whatsapp;
+const items = [
+  { key: 'whatsapp', label: 'WhatsApp', href: wa },
+  { key: 'telegram', label: 'Telegram', href: site.telegram },
+  { key: 'vk', label: 'ВКонтакте', href: site.vk },
+  { key: 'youtube', label: 'YouTube', href: site.youtube },
+] as const;
+---
+<div class:list={['social', `social-${size}`, { 'social-icons': !labels }]}>
+  {items.map((i) => (
+    <a class="soc" data-brand={i.key} href={i.href} target="_blank" rel="noopener" aria-label={labels ? undefined : i.label} title={i.label}>
+      <span class="soc-icon"><Icon name={i.key} size={size === 'sm' ? 16 : 19} /></span>
+      {labels && <span class="soc-label">{i.label}</span>}
+    </a>
+  ))}
+</div>

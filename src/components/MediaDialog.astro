@@ -1,0 +1,91 @@
+---
+// Один просмотрщик на странице: видео с прицела, обзор (RuTube/YouTube) или фото с листанием.
+---
+<dialog class="media-dialog" id="media-dialog" aria-label="Просмотр">
+  <div class="md-frame">
+    <button class="md-close" type="button" data-md-close aria-label="Закрыть">×</button>
+    <button class="md-nav md-prev" type="button" data-md-prev aria-label="Предыдущее">‹</button>
+    <div class="md-stage" data-md-stage></div>
+    <button class="md-nav md-next" type="button" data-md-next aria-label="Следующее">›</button>
+    <div class="md-caption"><span data-md-title></span><span class="md-links" data-md-links></span></div>
+  </div>
+</dialog>
+
+<script>
+  type Item = { type: 'video' | 'embed' | 'image'; src: string; title: string; poster?: string; links?: { label: string; href: string }[] };
+  const dialog = document.getElementById('media-dialog') as HTMLDialogElement;
+  const stage = dialog.querySelector<HTMLElement>('[data-md-stage]')!;
+  const title = dialog.querySelector<HTMLElement>('[data-md-title]')!;
+  const links = dialog.querySelector<HTMLElement>('[data-md-links]')!;
+  let group: HTMLElement[] = [];
+  let index = 0;
+
+  const read = (el: HTMLElement): Item => JSON.parse(el.dataset.media!);
+  function show(i: number) {
+    index = (i + group.length) % group.length;
+    const item = read(group[index]);
+    stage.replaceChildren();
+    if (item.type === 'video') {
+      const v = document.createElement('video');
+      Object.assign(v, { src: item.src, controls: true, autoplay: true, playsInline: true, poster: item.poster ?? '' });
+      stage.append(v);
+    } else if (item.type === 'embed') {
+      const f = document.createElement('iframe');
+      Object.assign(f, { src: item.src, title: item.title, allowFullscreen: true });
+      f.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture; clipboard-write';
+      stage.append(f);
+    } else {
+      const img = document.createElement('img');
+      Object.assign(img, { src: item.src, alt: item.title });
+      stage.append(img);
+    }
+    stage.dataset.type = item.type;
+    title.textContent = item.title;
+    links.replaceChildren(...(item.links ?? []).map((l) => Object.assign(document.createElement('a'), { href: l.href, textContent: l.label, target: '_blank', rel: 'noopener' })));
+    dialog.querySelectorAll<HTMLElement>('.md-nav').forEach((b) => (b.hidden = group.length < 2));
+  }
+  function close() {
+    stage.replaceChildren(); // Останавливаем видео и плеер.
+    if (dialog.open) dialog.close();
+  }
+
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-media]');
+    if (!trigger) return;
+    e.preventDefault();
+    const name = trigger.dataset.group;
+    group = name ? [...document.querySelectorAll<HTMLElement>(`[data-media][data-group="${name}"]`)] : [trigger];
+    dialog.showModal();
+    show(group.indexOf(trigger));
+  });
+  dialog.querySelector('[data-md-close]')!.addEventListener('click', close);
+  dialog.querySelector('[data-md-prev]')!.addEventListener('click', () => show(index - 1));
+  dialog.querySelector('[data-md-next]')!.addEventListener('click', () => show(index + 1));
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) close(); });
+  dialog.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+  dialog.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' && group.length > 1) show(index + 1);
+    if (e.key === 'ArrowLeft' && group.length > 1) show(index - 1);
+  });
+</script>
+
+<style>
+  .media-dialog { width: min(1180px, 100vw - 24px); max-height: calc(100dvh - 24px); padding: 0; border: 0; background: transparent; color: var(--text); overflow: visible; }
+  .media-dialog::backdrop { background: rgba(5, 6, 8, 0.86); backdrop-filter: blur(6px); }
+  .md-frame { position: relative; display: grid; gap: 12px; }
+  .md-stage { display: grid; place-items: center; border-radius: var(--radius); overflow: hidden; background: #000; border: 1px solid var(--line-strong); }
+  .md-stage :global(video), .md-stage :global(img) { display: block; max-width: 100%; max-height: calc(100dvh - 140px); }
+  .md-stage[data-type='embed'] { aspect-ratio: 16 / 9; }
+  .md-stage :global(iframe) { width: 100%; height: 100%; border: 0; }
+  .md-caption { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-weight: 600; font-size: 15px; }
+  .md-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .md-links :global(a) { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line-strong); font-size: 13px; transition: border-color 0.2s, color 0.2s; }
+  .md-links :global(a:hover) { border-color: var(--gold); color: var(--gold); }
+  .md-close { position: absolute; right: -6px; top: -50px; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--surface); font-size: 26px; line-height: 1; }
+  .md-close:hover { background: var(--accent); border-color: var(--accent); }
+  .md-nav { position: absolute; top: calc(50% - 40px); z-index: 2; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line-strong); background: rgba(11, 12, 15, 0.7); font-size: 30px; line-height: 1; backdrop-filter: blur(6px); transition: background-color 0.2s; }
+  .md-nav:hover { background: var(--accent); }
+  .md-prev { left: 12px; } .md-next { right: 12px; }
+  .md-nav[hidden] { display: none; }
+  @media (max-width: 640px) { .md-close { top: -48px; right: 0; } .md-nav { width: 40px; height: 40px; font-size: 24px; } }
+</style>

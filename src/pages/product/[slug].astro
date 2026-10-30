@@ -6,6 +6,10 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { products, type Product } from '../../lib/catalog';
 import { lines } from '../../data/content';
 import { site } from '../../data/site';
+import ClipGrid from '../../components/ClipGrid.astro';
+import ReviewGrid from '../../components/ReviewGrid.astro';
+import PhotoGallery from '../../components/PhotoGallery.astro';
+import { mediaFor } from '../../data/media';
 
 export function getStaticPaths() {
   return products.map((product) => ({ params: { slug: `rikanv-${product.slug}` }, props: { product } }));
@@ -13,6 +17,7 @@ export function getStaticPaths() {
 
 const { product: p } = Astro.props as { product: Product };
 const line = lines[p.line];
+const media = mediaFor(p.slug, p.line);
 const siblings = products.filter((x) => x.line === p.line && x.slug !== p.slug);
 const related = [...siblings, ...products.filter((x) => x.category.slug === p.category.slug && x.line !== p.line && x.slug !== p.slug)].slice(0, 4);
 const crumbs = [
@@ -116,6 +121,7 @@ const productLd = {
   <nav class="wrap tabs" aria-label="Разделы страницы">
     <a href="#opisanie">Описание</a>
     <a href="#harakteristiki">Характеристики</a>
+    {(media.clips.length > 0 || media.reviews.length > 0) && <a href="#video">Видео</a>}
     {p.johnson && <a href="#dalnosti">Дальности</a>}
     {related.length > 0 && <a href="#pohozhie">Похожие модели</a>}
   </nav>
@@ -124,6 +130,28 @@ const productLd = {
     <h2 id="desc-title">Описание {p.name}</h2>
     <div class="prose">{p.copy.body.map((text) => <p>{text}</p>)}</div>
   </section>
+
+  {(media.clips.length > 0 || media.reviews.length > 0) && (
+    <section class="wrap block" id="video" aria-labelledby="video-title">
+      <div class="section-head">
+        <h2 id="video-title">Видео {line.name}</h2>
+        <a class="btn btn-ghost btn-sm" href="/video/">Все видео</a>
+      </div>
+      {media.reviews.length > 0 && <ReviewGrid items={media.reviews.slice(0, 3)} />}
+      {media.clips.length > 0 && (
+        <>
+          <h3 class="sub-h">Записи с прибора</h3>
+          <ClipGrid items={media.clips.slice(0, 4)} group="product-clips" />
+        </>
+      )}
+      {media.photos.length > 0 && (
+        <>
+          <h3 class="sub-h">Трофеи и прибор в деле</h3>
+          <PhotoGallery items={media.photos.slice(0, 4)} group="product-photos" />
+        </>
+      )}
+    </section>
+  )}
 
   <section class="wrap block" id="harakteristiki" aria-labelledby="specs-title">
     <h2 id="specs-title">Характеристики</h2>
@@ -237,6 +265,8 @@ const productLd = {
   .block { padding-top: 56px; scroll-margin-top: 170px; }
   .block > h2 { margin-bottom: 22px; }
   .prose { max-width: 820px; }
+  .sub-h { font-size: 18px; margin: 32px 0 16px; }
+  #video .section-head { margin-bottom: 20px; }
 
   .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
   .spec-group { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }

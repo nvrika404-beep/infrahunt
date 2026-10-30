@@ -1,22 +1,139 @@
 ---
-import TextPage from '../components/TextPage.astro';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Icon, { type IconName } from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import Consult from '../components/Consult.astro';
+import { faq } from '../data/faq';
 import { site } from '../data/site';
+
+const steps: { icon: IconName; title: string; text: string }[] = [
+  { icon: 'cart', title: 'Заявка', text: 'Оформите корзину на сайте, позвоните или напишите в WhatsApp и Telegram.' },
+  { icon: 'chat', title: 'Подтверждение', text: 'Консультант проверит наличие, поможет с кронштейном и назовёт стоимость доставки.' },
+  { icon: 'doc', title: 'Счёт и оплата', text: 'Выставляем счёт после согласования стоимости и наличия. Оплачиваете — и прибор ваш.' },
+  { icon: 'truck', title: 'Отправка', text: 'Упаковываем и отправляем выбранной службой доставки — посылку можно отследить по трек-номеру.' },
+];
+const methods: { icon: IconName; title: string; text: string; tag: string }[] = [
+  { icon: 'truck', title: 'Курьер СДЭК', text: 'Привезёт заказ до двери. Сроки и стоимость — по тарифам СДЭК.', tag: 'до двери' },
+  { icon: 'pin', title: 'Пункт выдачи СДЭК', text: 'Заберёте в ближайшем пункте выдачи, когда удобно.', tag: 'самовывоз' },
+  { icon: 'post', title: 'Почта России', text: 'Доставим в любое почтовое отделение страны по тарифам Почты России.', tag: 'по всей стране' },
+];
+const deliveryFaq = faq.filter(([q]) => /оплатить|доставляете|гарантия/i.test(q));
 ---
-<TextPage title="Доставка и оплата тепловизоров по России" h1="Доставка и оплата" label="Доставка и оплата" path="/dostavka-i-oplata/"
-  description="Доставка тепловизоров RikaNV по всей России: СДЭК курьером и в пункт выдачи, Почта России. Оплата по счёту после подтверждения наличия.">
-  <h2>Доставка по России</h2>
-  <ul>
-    <li><b>Курьером СДЭК</b> — до двери, в сроки и по тарифам СДЭК.</li>
-    <li><b>В пункт выдачи СДЭК</b> — самовывоз из ближайшего ПВЗ.</li>
-    <li><b>Почтой России</b> — в сроки и по тарифам Почты России.</li>
-  </ul>
-  <p>Стоимость доставки зависит от города и способа — консультант назовёт её при подтверждении заказа.</p>
-  <h2>Оплата</h2>
-  <p>Оплата — по выставленному счёту, после согласования стоимости и подтверждения наличия товара. Приборы с пометкой «Под заказ» поставляются по предварительной договорённости о сроках.</p>
-  <h2>Как оформить заказ</h2>
-  <ul>
-    <li>Добавьте приборы в корзину и оставьте имя и телефон.</li>
-    <li>Или напишите в <a href={site.whatsapp} target="_blank" rel="noopener">WhatsApp</a>, или позвоните {site.phones[0].display}.</li>
-    <li>Консультант уточнит наличие, доставку и выставит счёт.</li>
-  </ul>
-</TextPage>
+<Base title="Доставка и оплата тепловизоров RikaNV по России"
+  description="Доставка тепловизоров RikaNV по всей России: курьер и пункты выдачи СДЭК, Почта России. Оплата по счёту после подтверждения наличия. Как оформить заказ за 4 шага.">
+  <div class="wrap">
+    <Breadcrumbs items={[{ href: '/', label: 'Главная' }, { href: '/dostavka-i-oplata/', label: 'Доставка и оплата' }]} />
+    <header class="head">
+      <div>
+        <p class="eyebrow">Покупателям</p>
+        <h1>Доставка и оплата</h1>
+      </div>
+      <p class="muted">Отправляем приборы RikaNV в любой город России. Сначала подтверждаем наличие и стоимость, потом выставляем счёт — без предоплаты вслепую.</p>
+    </header>
+
+    <section aria-labelledby="steps-title">
+      <h2 id="steps-title" class="title">Как проходит заказ</h2>
+      <ol class="steps">
+        {steps.map((s, i) => (
+          <li class="step" data-glow>
+            <span class="num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="step-icon"><Icon name={s.icon} size={26} /></span>
+            <b>{s.title}</b>
+            <p>{s.text}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section aria-labelledby="ship-title" class="block">
+      <h2 id="ship-title" class="title">Способы доставки</h2>
+      <div class="methods">
+        {methods.map((m) => (
+          <article class="method" data-glow>
+            <div class="method-top"><span class="m-icon"><Icon name={m.icon} size={30} /></span><span class="chip chip-dark">{m.tag}</span></div>
+            <h3>{m.title}</h3>
+            <p>{m.text}</p>
+          </article>
+        ))}
+      </div>
+      <p class="hint"><Icon name="route" size={18} />Стоимость доставки зависит от города и способа — консультант назовёт её при подтверждении заказа.</p>
+    </section>
+
+    <section aria-labelledby="pay-title" class="block pay">
+      <div class="pay-card" data-glow>
+        <span class="m-icon"><Icon name="card" size={30} /></span>
+        <div>
+          <h2 id="pay-title">Оплата по счёту</h2>
+          <p>Счёт выставляем после согласования стоимости и подтверждения наличия товара. Никаких платежей до того, как мы убедились, что прибор есть и готов к отправке.</p>
+        </div>
+      </div>
+      <div class="pay-card" data-glow>
+        <span class="m-icon"><Icon name="clock" size={30} /></span>
+        <div>
+          <h2>Товары «Под заказ»</h2>
+          <p>Поставляются по предварительной договорённости о сроках. Консультант заранее скажет, когда прибор будет у вас.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block cta-row">
+      <a class="btn btn-primary" href="/catalog/"><Icon name="cart" size={18} />Выбрать прибор</a>
+      <a class="btn btn-ghost" href={`${site.whatsapp}?text=${encodeURIComponent('Здравствуйте! Вопрос по доставке.')}`} target="_blank" rel="noopener"><Icon name="whatsapp" size={18} />Спросить о доставке</a>
+      <a class="btn btn-ghost" href={site.phones[1].href}><Icon name="phone" size={18} />{site.phones[1].display}</a>
+    </section>
+
+    <section class="block faq-row" aria-labelledby="dfaq">
+      <h2 id="dfaq" class="title">Вопросы о доставке и оплате</h2>
+      <Faq items={deliveryFaq} />
+    </section>
+
+    <section class="block"><Consult /></section>
+  </div>
+</Base>
+
+<style>
+  .head { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end; padding: 18px 0 40px; }
+  .head h1 { margin-top: 12px; }
+  .title { font-size: clamp(22px, 2.6vw, 30px); margin-bottom: 20px; }
+  .block { margin-top: 56px; }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; position: relative; counter-reset: step; }
+  .steps::before { content: ''; position: absolute; left: 28px; right: 28px; top: 50px; height: 2px; background: var(--heat); opacity: 0.5; z-index: -1; }
+  .step { --mx: 50%; --my: 0%; position: relative; display: grid; gap: 10px; align-content: start; padding: 22px; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden;
+    background: radial-gradient(300px circle at var(--mx) var(--my), rgba(255, 90, 31, 0.14), transparent 65%), var(--surface); transition: transform 0.35s var(--ease), border-color 0.3s; }
+  .step:hover { transform: translateY(-5px); border-color: rgba(255, 122, 26, 0.45); }
+  .num { position: absolute; right: 18px; top: 14px; font-family: var(--display); font-size: 34px; font-weight: 600; color: rgba(255, 255, 255, 0.07); transition: color 0.3s; }
+  .step:hover .num { color: rgba(255, 122, 26, 0.35); }
+  .step-icon, .m-icon { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--bg); border: 1px solid var(--line-strong); color: var(--accent-2); transition: background 0.35s, color 0.3s, transform 0.45s var(--ease); }
+  .step:hover .step-icon, .method:hover .m-icon, .pay-card:hover .m-icon { background: var(--heat); color: #fff; border-color: transparent; transform: rotate(-6deg) scale(1.06); }
+  .step b { font-family: var(--display); font-weight: 600; font-size: 18px; margin-top: 6px; }
+  .step p, .method p, .pay-card p { color: #cfcdc8; font-size: 14.5px; }
+
+  .methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .method { --mx: 50%; --my: 0%; display: grid; gap: 12px; padding: 24px; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden;
+    background: radial-gradient(320px circle at var(--mx) var(--my), rgba(212, 20, 90, 0.14), transparent 65%), var(--surface); transition: transform 0.35s var(--ease), border-color 0.3s; }
+  .method:hover { transform: translateY(-5px); border-color: rgba(255, 122, 26, 0.45); }
+  .method-top { display: flex; justify-content: space-between; align-items: start; }
+  .method h3 { font-size: 20px; }
+  .hint { display: flex; gap: 10px; align-items: center; margin-top: 16px; color: var(--muted); font-size: 14.5px; }
+  .hint :global(.icon) { color: var(--accent-2); flex: none; }
+
+  .pay { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pay-card { --mx: 20%; --my: 20%; display: flex; gap: 18px; padding: 24px; border-radius: var(--radius); border: 1px solid rgba(255, 122, 26, 0.25);
+    background: radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 90, 31, 0.14), transparent 65%), var(--surface); }
+  .pay-card .m-icon { flex: none; }
+  .pay-card h2 { font-size: 20px; margin-bottom: 8px; }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .cta-row :global(.icon) { flex: none; }
+  .faq-row { max-width: 860px; }
+
+  @media (max-width: 960px) {
+    .head, .pay { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .steps::before { display: none; }
+    .methods { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+</style>

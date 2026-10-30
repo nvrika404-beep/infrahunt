@@ -1,5 +1,6 @@
 ---
 import { site } from '../data/site';
+import Icon from './Icon.astro';
 interface Props { product?: string }
 const { product } = Astro.props;
 const text = encodeURIComponent(product ? `Здравствуйте! Интересует ${product}.` : 'Здравствуйте! Помогите выбрать тепловизор.');
@@ -11,9 +12,9 @@ const text = encodeURIComponent(product ? `Здравствуйте! Интер�
     <p class="muted">Расскажите, где и на кого охотитесь, какой у вас карабин — подберём прибор и кронштейн, ответим на вопросы по настройке.</p>
   </div>
   <div class="ways">
-    <a class="way" href={site.phones[0].href}><small>Позвонить</small>{site.phones[0].display}</a>
-    <a class="way" href={`${site.whatsapp}?text=${text}`} target="_blank" rel="noopener"><small>Написать</small>WhatsApp</a>
-    <a class="way" href={site.telegram} target="_blank" rel="noopener"><small>Наша группа</small>Telegram</a>
+    <a class="way" href={site.phones[0].href}><span class="wi"><Icon name="phone" size={22} /></span><span><small>Позвонить</small>{site.phones[0].display}</span></a>
+    <a class="way" data-brand="whatsapp" href={`${site.whatsapp}?text=${text}`} target="_blank" rel="noopener"><span class="wi"><Icon name="whatsapp" size={22} /></span><span><small>Написать</small>WhatsApp</span></a>
+    <a class="way" data-brand="telegram" href={site.telegram} target="_blank" rel="noopener"><span class="wi"><Icon name="telegram" size={22} /></span><span><small>Наша группа</small>Telegram</span></a>
   </div>
 </aside>
 
@@ -26,8 +27,14 @@ const text = encodeURIComponent(product ? `Здравствуйте! Интер�
   }
   .text { display: flex; flex-direction: column; gap: 14px; }
   .ways { display: grid; gap: 10px; }
-  .way { display: flex; flex-direction: column; padding: 16px 20px; border-radius: var(--radius-sm); border: 1px solid var(--line-strong); background: rgba(0, 0, 0, 0.25); font-weight: 700; font-size: 18px; transition: border-color 0.25s, transform 0.3s var(--ease), background-color 0.25s; }
+  .way { --brand: var(--accent-2); display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--line-strong); background: rgba(0, 0, 0, 0.25); font-weight: 700; font-size: 18px; transition: border-color 0.25s, transform 0.3s var(--ease), background-color 0.25s; }
+  .way > span:last-child { display: flex; flex-direction: column; line-height: 1.25; }
   .way small { color: var(--muted); font-size: 12px; font-weight: 600; }
-  .way:hover { border-color: var(--gold); transform: translateX(6px); background: rgba(255, 194, 61, 0.06); }
+  .way[data-brand='whatsapp'] { --brand: #25d366; }
+  .way[data-brand='telegram'] { --brand: #2aabee; }
+  .wi { display: grid; place-items: center; flex: none; width: 46px; height: 46px; border-radius: 14px; background: rgba(255, 255, 255, 0.06); color: var(--brand); transition: background-color 0.3s, color 0.3s; }
+  .way:hover { border-color: var(--brand); transform: translateX(6px); }
+  .way:hover .wi { background: var(--brand); color: #fff; animation: soc-pop 0.6s var(--ease); }
+  .way:hover .icon-phone { animation: ring 0.7s ease-in-out; }
   @media (max-width: 860px) { .consult { grid-template-columns: 1fr; } }
 </style>

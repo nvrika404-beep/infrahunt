@@ -95,3 +95,47 @@ p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Соцсети: при наведении кружок заливается цветом бренда, иконка подпрыгивает. */
+.social { display: flex; flex-wrap: wrap; gap: 8px; }
+.soc {
+  --brand: var(--accent);
+  position: relative; display: inline-flex; align-items: center; gap: 9px; padding: 5px 14px 5px 5px; border-radius: 999px;
+  border: 1px solid var(--line-strong); font-size: 13.5px; font-weight: 700; overflow: hidden; isolation: isolate;
+  transition: border-color 0.3s, color 0.3s, transform 0.3s var(--ease);
+}
+.soc[data-brand='whatsapp'] { --brand: #25d366; }
+.soc[data-brand='telegram'] { --brand: #2aabee; }
+.soc[data-brand='vk'] { --brand: #0077ff; }
+.soc[data-brand='youtube'] { --brand: #ff0033; }
+.soc::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--brand); opacity: 0.14; transform: translateX(-101%); transition: transform 0.45s var(--ease); }
+.soc-icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.07); color: var(--brand); transition: background-color 0.3s, color 0.3s, transform 0.45s var(--ease); }
+.soc:hover { border-color: var(--brand); transform: translateY(-2px); }
+.soc:hover::before { transform: none; }
+.soc:hover .soc-icon { background: var(--brand); color: #fff; animation: soc-pop 0.6s var(--ease); }
+.social-sm .soc { padding: 3px 11px 3px 3px; font-size: 12.5px; gap: 7px; }
+.social-sm .soc-icon { width: 26px; height: 26px; }
+.social-icons .soc { padding: 0; border: 0; }
+.social-icons .soc-icon { width: 38px; height: 38px; border: 1px solid var(--line-strong); }
+.social-icons .soc:hover .soc-icon { border-color: var(--brand); }
+@keyframes soc-pop { 0% { transform: scale(1) rotate(0); } 35% { transform: scale(1.22) rotate(-10deg); } 65% { transform: scale(0.94) rotate(6deg); } 100% { transform: scale(1) rotate(0); } }
+
+/* Строка контакта с иконкой: телефон покачивается, конверт «открывается». */
+.contact-line { display: flex; align-items: center; gap: 12px; }
+.contact-line .ci { display: grid; place-items: center; flex: none; width: 38px; height: 38px; border-radius: 12px; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line); color: var(--accent-2); transition: background 0.3s, color 0.3s, border-color 0.3s; }
+.contact-line:hover .ci { background: var(--heat); color: #fff; border-color: transparent; }
+.contact-line:hover .icon-phone { animation: ring 0.7s ease-in-out; }
+.contact-line:hover .icon-mail, .contact-line:hover .icon-pin, .contact-line:hover .icon-support { animation: soc-pop 0.6s var(--ease); }
+.contact-line .ct { display: flex; flex-direction: column; line-height: 1.25; }
+.contact-line .ct small { font-size: 12px; font-weight: 600; color: var(--muted); }
+@keyframes ring { 0%, 100% { transform: rotate(0); } 15%, 45% { transform: rotate(-16deg); } 30%, 60% { transform: rotate(14deg); } 75% { transform: rotate(-6deg); } }
+
+/* Курсор: светлая стрелка, на кликабельном — загорается тепловым градиентом. Только для мыши. */
+@media (hover: hover) and (pointer: fine) {
+  html { cursor: url('/cursor/arrow.svg') 6 3, auto; }
+  a, button, summary, label, select, [role='tab'], [data-thumb], .soc, input[type='checkbox'], input[type='radio'] {
+    cursor: url('/cursor/arrow-hot.svg') 6 3, pointer;
+  }
+  input:not([type='checkbox']):not([type='radio']), textarea { cursor: text; }
+  button:disabled { cursor: url('/cursor/arrow.svg') 6 3, not-allowed; }
+}

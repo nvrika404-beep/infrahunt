@@ -1,17 +1,123 @@
 ---
-import TextPage from '../components/TextPage.astro';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Icon from '../components/Icon.astro';
+import Social from '../components/Social.astro';
 import { site } from '../data/site';
+
+const hints = ['Подбор прибора, кронштейна и комплектации', 'Заказы, доставка, обмен и возврат', 'Настройка, пристрелка и прошивки'];
+const mapQuery = encodeURIComponent(site.address.full);
+const requisites = [
+  ['Получатель', site.legal.name],
+  ['ИНН', site.legal.inn],
+  ['ОГРНИП', site.legal.ogrnip],
+];
 ---
-<TextPage title="Контакты InfraHunt — телефоны, WhatsApp, Telegram" h1="Контакты" label="Контакты" path="/kontakty/"
-  description={`Контакты InfraHunt: консультация по тепловизорам ${site.phones[0].display}, WhatsApp, Telegram, почта ${site.email}. ${site.address.region}, Анапский район.`}>
-  <div class="cards">
-    {site.phones.map((p) => <div class="card"><small>{p.label}</small><b><a href={p.href}>{p.display}</a></b></div>)}
-    <div class="card"><small>Почта</small><b><a href={`mailto:${site.email}`}>{site.email}</a></b></div>
-    <div class="card"><small>Мессенджеры</small><b><a href={site.whatsapp} target="_blank" rel="noopener">WhatsApp</a> · <a href={site.telegram} target="_blank" rel="noopener">Telegram</a></b></div>
-    <div class="card"><small>Соцсети</small><b><a href={site.vk} target="_blank" rel="noopener">ВКонтакте</a> · <a href={site.youtube} target="_blank" rel="noopener">YouTube</a></b></div>
+<Base title="Контакты InfraHunt — телефоны, WhatsApp, Telegram, адрес"
+  description={`Контакты InfraHunt: консультация по тепловизорам RikaNV ${site.phones[0].display}, WhatsApp, Telegram, почта ${site.email}. ${site.address.region}, Анапский район.`}>
+  <div class="wrap">
+    <Breadcrumbs items={[{ href: '/', label: 'Главная' }, { href: '/kontakty/', label: 'Контакты' }]} />
+    <header class="head">
+      <div>
+        <p class="eyebrow">На связи</p>
+        <h1>Контакты</h1>
+      </div>
+      <p class="muted">Консультируем по выбору, настройке и пристрелке приборов RikaNV. Звоните или пишите в мессенджеры — ответим в рабочее время.</p>
+    </header>
+
+    <section class="phones" aria-label="Телефоны">
+      {site.phones.map((p, i) => (
+        <a class="card phone-card contact-line" href={p.href} data-glow>
+          <span class="ci big"><Icon name={i === 2 ? 'support' : 'phone'} size={26} /></span>
+          <span class="ct"><small>{p.label}</small><b>{p.display}</b><em>{hints[i]}</em></span>
+        </a>
+      ))}
+    </section>
+
+    <section class="row" aria-label="Почта и мессенджеры">
+      <a class="card contact-line mail-card" href={`mailto:${site.email}`} data-glow>
+        <span class="ci big"><Icon name="mail" size={26} /></span>
+        <span class="ct"><small>Почта</small><b>{site.email}</b><em>Для счетов, документов и вопросов по заказу</em></span>
+      </a>
+      <div class="card messengers" data-glow>
+        <small class="label">Мессенджеры и соцсети</small>
+        <p class="muted">Пришлите фото карабина или задачу — подскажем прибор и кронштейн.</p>
+        <Social />
+      </div>
+    </section>
+
+    <section class="map-block" aria-labelledby="addr">
+      <div class="map">
+        <iframe src={`https://yandex.ru/map-widget/v1/?text=${mapQuery}&z=14`} title="Карта: адрес InfraHunt" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <div class="map-card">
+        <a class="contact-line" href={`https://yandex.ru/maps/?text=${mapQuery}`} target="_blank" rel="noopener">
+          <span class="ci big"><Icon name="pin" size={26} /></span>
+          <span class="ct"><small id="addr">Адрес</small><b>{site.address.locality}</b><em>{site.address.street}, {site.address.region}, {site.address.postalCode}</em></span>
+        </a>
+        <a class="btn btn-primary btn-sm route" href={`https://yandex.ru/maps/?rtext=~${mapQuery}`} target="_blank" rel="noopener"><Icon name="route" size={18} />Построить маршрут</a>
+        <p class="note"><Icon name="truck" size={16} />Отправляем заказы по всей России — приезжать не обязательно.</p>
+      </div>
+    </section>
+
+    <section class="card requisites" aria-labelledby="req">
+      <div class="req-head"><span class="ci"><Icon name="doc" size={22} /></span><h2 id="req">Реквизиты</h2></div>
+      <dl>
+        {requisites.map(([k, v]) => (
+          <div><dt>{k}</dt><dd><span>{v}</span><button type="button" class="copy" data-copy={v} aria-label={`Скопировать: ${k}`}><Icon name="copy" size={16} /></button></dd></div>
+        ))}
+      </dl>
+    </section>
   </div>
-  <h2>Адрес</h2>
-  <p>{site.address.full}</p>
-  <h2>Реквизиты</h2>
-  <p>{site.legal.name}<br />ИНН {site.legal.inn}<br />ОГРНИП {site.legal.ogrnip}</p>
-</TextPage>
+</Base>
+
+<script>
+  import { toast } from '../scripts/store';
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => button.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(button.dataset.copy!); toast('Скопировано'); } catch { toast('Не удалось скопировать'); }
+  }));
+</script>
+
+<style>
+  .head { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end; padding: 18px 0 32px; }
+  .head h1 { margin-top: 12px; }
+  .card { --mx: 50%; --my: 50%; position: relative; border-radius: var(--radius); border: 1px solid var(--line); padding: 22px; overflow: hidden; isolation: isolate;
+    background: radial-gradient(360px circle at var(--mx) var(--my), rgba(255, 90, 31, 0.1), transparent 65%), var(--surface); transition: border-color 0.3s, transform 0.35s var(--ease); }
+  a.card:hover { border-color: rgba(255, 122, 26, 0.45); transform: translateY(-4px); }
+  .ci.big { width: 56px; height: 56px; border-radius: 16px; }
+  .ct b { font-family: var(--display); font-weight: 600; font-size: 20px; margin-top: 2px; }
+  .ct em { font-style: normal; font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+  .contact-line { align-items: flex-start; gap: 16px; }
+  .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .row { display: grid; grid-template-columns: 1fr 1.2fr; gap: 14px; margin-top: 14px; }
+  .mail-card .ct b { overflow-wrap: anywhere; }
+  .messengers { display: grid; gap: 10px; align-content: start; }
+  .label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .messengers .muted { font-size: 14px; }
+
+  .map-block { position: relative; display: grid; grid-template-columns: 1fr; margin-top: 14px; border-radius: calc(var(--radius) + 6px); overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+  .map iframe { display: block; width: 100%; height: 460px; border: 0; filter: grayscale(0.4) invert(0.9) hue-rotate(180deg) contrast(0.9); }
+  .map-card { position: absolute; left: 18px; bottom: 18px; display: grid; gap: 14px; max-width: 360px; padding: 20px; border-radius: var(--radius); background: rgba(16, 18, 23, 0.92); border: 1px solid var(--line-strong); backdrop-filter: blur(10px); }
+  .route { justify-self: start; }
+  .note { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+  .note :global(.icon) { color: var(--accent-2); flex: none; }
+
+  .requisites { margin-top: 14px; }
+  .req-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .req-head h2 { font-size: 20px; }
+  .req-head .ci { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: rgba(255, 255, 255, 0.06); color: var(--accent-2); }
+  .requisites dl { margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .requisites dl div { padding: 14px 16px; border-radius: var(--radius-sm); background: var(--bg); border: 1px solid var(--line); }
+  .requisites dt { font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+  .requisites dd { margin: 4px 0 0; display: flex; justify-content: space-between; align-items: center; gap: 8px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .copy { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: 8px; border: 1px solid var(--line-strong); background: transparent; color: var(--muted); transition: color 0.2s, border-color 0.2s, transform 0.2s; }
+  .copy:hover { color: var(--gold); border-color: var(--gold); transform: scale(1.08); }
+
+  @media (max-width: 960px) {
+    .head, .row { grid-template-columns: 1fr; }
+    .phones, .requisites dl { grid-template-columns: 1fr; }
+    .map-block { min-height: 0; }
+    .map-card { position: static; max-width: none; border-radius: 0; border: 0; border-top: 1px solid var(--line); }
+    .map iframe { height: 320px; }
+  }
+</style>

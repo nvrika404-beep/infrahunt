@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ClipGrid from '../components/ClipGrid.astro';
+import ReviewGrid from '../components/ReviewGrid.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import Icon from '../components/Icon.astro';
+import { clips, photos, reviews, clipPoster, clipSrc, reviewThumb, reviewEmbed } from '../data/media';
+import { lines } from '../data/content';
+import { site } from '../data/site';
+
+const abs = (path: string) => new URL(path, site.url).href;
+const usedLines = [...new Set([...reviews, ...clips].map((m) => m.line))];
+const videoLd = [
+  ...reviews.filter((r) => r.date).map((r) => ({
+    '@context': 'https://schema.org', '@type': 'VideoObject', name: r.title, description: `${r.title}. Видеообзор прибора RikaNV ${lines[r.line]?.name}.`,
+    thumbnailUrl: abs(reviewThumb(r)), uploadDate: r.date, embedUrl: reviewEmbed(r).replace('?autoplay=1', '').replace(/&rel=0&playsinline=1$/, ''),
+  })),
+  ...clips.map((c) => ({
+    '@context': 'https://schema.org', '@type': 'VideoObject', name: c.title, description: `Запись с тепловизионного прибора RikaNV ${lines[c.line]?.name}: ${c.title}.`,
+    thumbnailUrl: abs(clipPoster(c)), contentUrl: abs(clipSrc(c)), uploadDate: c.date, duration: `PT${c.duration}S`,
+  })),
+];
+---
+<Base title="Видеообзоры и кадры с тепловизоров RikaNV: Kaban, Moskit, Dovod PRO, Strekoza"
+  description="Видеообзоры тепловизионных прицелов RikaNV Kaban 650 LRF, Moskit 650 LRF и дальномеров Strekoza, записи с прицелов на охоте и фото трофеев охотников RikaNV."
+  jsonLd={videoLd}>
+  <div class="wrap">
+    <Breadcrumbs items={[{ href: '/', label: 'Главная' }, { href: '/video/', label: 'Видео и фото' }]} />
+    <header class="head">
+      <div><p class="eyebrow">Смотрите в деле</p><h1>Видеообзоры и кадры с прицелов</h1></div>
+      <p class="muted">Как приборы RikaNV показывают в поле: разборы от Ивана Клипацкого, записи с прицелов на охоте и трофеи охотников. Больше — в Telegram-канале RikaNV и на YouTube.</p>
+    </header>
+
+    <div class="filters" role="group" aria-label="Линейка">
+      <button type="button" class="filter is-active" data-media-filter="">Все</button>
+      {usedLines.map((l) => <button type="button" class="filter" data-media-filter={l}>{lines[l]?.name}</button>)}
+    </div>
+
+    <section class="block" aria-labelledby="rev">
+      <h2 id="rev" class="title">Видеообзоры <span class="count">{reviews.length}</span></h2>
+      <ReviewGrid items={reviews} />
+    </section>
+
+    <section class="block" aria-labelledby="clips">
+      <h2 id="clips" class="title">Записи с прицелов <span class="count">{clips.length}</span></h2>
+      <p class="muted sub">Наведите курсор — ролик оживёт. Нажмите, чтобы смотреть со звуком.</p>
+      <ClipGrid items={clips} />
+    </section>
+
+    <section class="block" aria-labelledby="ph">
+      <h2 id="ph" class="title">Трофеи и приборы в деле</h2>
+      <PhotoGallery items={photos} />
+    </section>
+
+    <section class="block more">
+      <div><h2>Новые кадры каждый день</h2><p class="muted">Охотники присылают записи в Telegram-канал RikaNV, а обзоры выходят на YouTube и RuTube.</p></div>
+      <div class="more-links">
+        <a class="soc" data-brand="telegram" href="https://t.me/clubRiKA" target="_blank" rel="noopener"><span class="soc-icon"><Icon name="telegram" size={19} /></span><span class="soc-label">Канал RikaNV</span></a>
+        <a class="soc" data-brand="youtube" href="https://www.youtube.com/@RikaNV" target="_blank" rel="noopener"><span class="soc-icon"><Icon name="youtube" size={19} /></span><span class="soc-label">YouTube RikaNV</span></a>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-media-filter]')];
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    const line = b.dataset.mediaFilter!;
+    buttons.forEach((x) => x.classList.toggle('is-active', x === b));
+    document.querySelectorAll<HTMLElement>('.review, .clip, .photo').forEach((el) => (el.hidden = Boolean(line) && el.dataset.line !== line));
+  }));
+</script>
+
+<style>
+  .head { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end; padding: 18px 0 28px; }
+  .head h1 { margin-top: 12px; }
+  .filters { position: sticky; top: 108px; z-index: 5; display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 0; background: linear-gradient(var(--bg) 70%, transparent); }
+  .filter { padding: 9px 15px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--bg); font-weight: 700; font-size: 14px; transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+  .filter:hover { border-color: var(--text); }
+  .filter.is-active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .block { margin-top: 44px; }
+  .title { font-size: clamp(22px, 2.6vw, 30px); margin-bottom: 18px; display: flex; align-items: baseline; gap: 12px; }
+  .count { font-family: var(--font); font-size: 15px; color: var(--muted); font-weight: 700; }
+  .sub { margin: -8px 0 18px; font-size: 14.5px; }
+  .more { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding: 28px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); }
+  .more h2 { font-size: 22px; margin-bottom: 8px; }
+  .more-links { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  @media (max-width: 960px) { .head { grid-template-columns: 1fr; } .filters { top: 64px; } }
+</style>

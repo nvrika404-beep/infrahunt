@@ -2,10 +2,13 @@
 import { categories } from '../data/content';
 import { site } from '../data/site';
 import { productsIn } from '../lib/catalog';
+import Icon from './Icon.astro';
+import Social from './Social.astro';
 
 const path = Astro.url.pathname;
 const nav = [
   { href: '/catalog/', label: 'Каталог' },
+  { href: '/video/', label: 'Видео' },
   { href: '/compare/', label: 'Сравнение' },
   { href: '/dostavka-i-oplata/', label: 'Доставка и оплата' },
   { href: '/kontakty/', label: 'Контакты' },
@@ -16,9 +19,9 @@ const nav = [
     <div class="wrap topbar-inner">
       <span>Официальная продукция RikaNV · доставка по всей России</span>
       <span class="topbar-links">
-        <a href={site.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
-        <a href={site.telegram} target="_blank" rel="noopener">Telegram</a>
-        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <a class="tl" data-brand="whatsapp" href={site.whatsapp} target="_blank" rel="noopener"><Icon name="whatsapp" size={15} />WhatsApp</a>
+        <a class="tl" data-brand="telegram" href={site.telegram} target="_blank" rel="noopener"><Icon name="telegram" size={15} />Telegram</a>
+        <a class="tl" href={`mailto:${site.email}`}><Icon name="mail" size={15} />{site.email}</a>
       </span>
     </div>
   </div>
@@ -48,8 +51,8 @@ const nav = [
     </nav>
 
     <div class="actions">
-      <a class="phone" href={site.phones[0].href}>
-        <small>Консультация</small>{site.phones[0].display}
+      <a class="phone contact-line" href={site.phones[0].href}>
+        <span class="ci"><Icon name="phone" size={17} /></span><span class="ct"><small>Консультация</small>{site.phones[0].display}</span>
       </a>
       <a class="icon-btn" href="/compare/" aria-label="Сравнение">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7" /></svg>
@@ -72,11 +75,11 @@ const nav = [
       <p class="eyebrow">Покупателям</p>
       {nav.slice(1).map((item) => <a class="drawer-link" href={item.href}>{item.label}</a>)}
       <div class="drawer-contacts">
-        {site.phones.map((p) => <a href={p.href}><small>{p.label}</small>{p.display}</a>)}
-        <div class="drawer-social">
-          <a class="btn btn-ghost btn-sm" href={site.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
-          <a class="btn btn-ghost btn-sm" href={site.telegram} target="_blank" rel="noopener">Telegram</a>
-        </div>
+        {site.phones.map((p, i) => (
+          <a class="contact-line" href={p.href}><span class="ci"><Icon name={i === 2 ? 'support' : 'phone'} size={18} /></span><span class="ct"><small>{p.label}</small>{p.display}</span></a>
+        ))}
+        <a class="contact-line" href={`mailto:${site.email}`}><span class="ci"><Icon name="mail" size={18} /></span><span class="ct"><small>Почта</small>{site.email}</span></a>
+        <Social size="sm" />
       </div>
     </div>
   </div>
@@ -102,7 +105,13 @@ const nav = [
   .topbar { border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
   .topbar-inner { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; }
   .topbar-links { display: flex; gap: 18px; }
-  .topbar-links a:hover { color: var(--text); }
+  .tl { display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s; }
+  .tl :global(.icon) { transition: transform 0.4s var(--ease), color 0.2s; }
+  .tl:hover { color: var(--text); }
+  .tl:hover :global(.icon) { transform: scale(1.2) rotate(-8deg); }
+  .tl[data-brand='whatsapp']:hover :global(.icon) { color: #25d366; }
+  .tl[data-brand='telegram']:hover :global(.icon) { color: #2aabee; }
+  .tl:not([data-brand]):hover :global(.icon) { color: var(--accent-2); }
   .bar { display: flex; align-items: center; gap: 28px; height: 72px; }
   .brand { display: flex; align-items: center; gap: 12px; flex: none; }
   .brand-mark { display: grid; place-items: center; width: 64px; height: 44px; border-radius: 12px; background: #f6f3ee; padding: 4px 6px; transition: transform 0.3s var(--ease); }
@@ -131,8 +140,8 @@ const nav = [
   .mega-item small { color: var(--muted); font-size: 12.5px; }
 
   .actions { display: flex; align-items: center; gap: 8px; }
-  .phone { display: flex; flex-direction: column; font-weight: 700; font-size: 15px; margin-right: 10px; line-height: 1.2; }
-  .phone small { font-size: 11px; font-weight: 600; color: var(--muted); }
+  .phone { font-weight: 700; font-size: 15px; margin-right: 10px; gap: 10px; }
+  .phone :global(.ci) { width: 36px; height: 36px; border-radius: 50%; }
   .phone:hover { color: var(--gold); }
   .icon-btn { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line-strong); background: transparent; transition: border-color 0.2s, background-color 0.2s; }
   .icon-btn:hover { border-color: var(--text); background: rgba(255, 255, 255, 0.05); }
@@ -146,9 +155,8 @@ const nav = [
   .drawer-link { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 17px; font-weight: 600; }
   .drawer-link small { color: var(--gold); font-size: 12px; }
   .drawer-contacts { display: grid; gap: 12px; margin-top: 22px; }
-  .drawer-contacts > a { display: flex; flex-direction: column; font-weight: 700; font-size: 18px; }
-  .drawer-contacts small { color: var(--muted); font-size: 12px; font-weight: 600; }
-  .drawer-social { display: flex; gap: 10px; margin-top: 6px; }
+  .drawer-contacts > a { font-weight: 700; font-size: 18px; }
+  .drawer-contacts :global(.social) { margin-top: 6px; }
 
   @media (max-width: 1180px) { .phone { display: none; } }
   @media (max-width: 1024px) {

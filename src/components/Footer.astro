@@ -1,6 +1,8 @@
 ---
 import { categories } from '../data/content';
 import { site } from '../data/site';
+import Icon from './Icon.astro';
+import Social from './Social.astro';
 const year = new Date().getFullYear();
 ---
 <footer class="footer">
@@ -8,12 +10,7 @@ const year = new Date().getFullYear();
     <div class="about">
       <a class="logo" href="/" aria-label="InfraHunt"><img src="/img/logo.png" width="360" height="169" alt="Логотип InfraHunt" loading="lazy" /></a>
       <p>InfraHunt — магазин тепловизионной оптики RikaNV. Подбираем прибор под вашу охоту, настраиваем и отправляем по всей России.</p>
-      <div class="social">
-        <a href={site.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
-        <a href={site.telegram} target="_blank" rel="noopener">Telegram</a>
-        <a href={site.vk} target="_blank" rel="noopener">ВКонтакте</a>
-        <a href={site.youtube} target="_blank" rel="noopener">YouTube</a>
-      </div>
+      <Social />
     </div>
     <nav aria-label="Каталог">
       <h2>Каталог</h2>
@@ -21,6 +18,7 @@ const year = new Date().getFullYear();
     </nav>
     <nav aria-label="Покупателям">
       <h2>Покупателям</h2>
+      <a href="/video/">Видеообзоры и кадры</a>
       <a href="/dostavka-i-oplata/">Доставка и оплата</a>
       <a href="/obmen-i-vozvrat/">Обмен и возврат</a>
       <a href="/compare/">Сравнение приборов</a>
@@ -29,8 +27,10 @@ const year = new Date().getFullYear();
     </nav>
     <div class="contacts">
       <h2>Связаться</h2>
-      {site.phones.map((p) => <a href={p.href}><small>{p.label}</small>{p.display}</a>)}
-      <a href={`mailto:${site.email}`}><small>Почта</small>{site.email}</a>
+      {site.phones.map((p, i) => (
+        <a class="contact-line" href={p.href}><span class="ci"><Icon name={i === 2 ? 'support' : 'phone'} size={18} /></span><span class="ct"><small>{p.label}</small>{p.display}</span></a>
+      ))}
+      <a class="contact-line" href={`mailto:${site.email}`}><span class="ci"><Icon name="mail" size={18} /></span><span class="ct"><small>Почта</small>{site.email}</span></a>
     </div>
   </div>
   <div class="wrap legal">
@@ -45,16 +45,14 @@ const year = new Date().getFullYear();
   .logo { display: inline-block; background: #f6f3ee; border-radius: 14px; padding: 8px 12px; margin-bottom: 18px; }
   .logo img { width: 110px; }
   .about p { color: var(--muted); font-size: 14.5px; max-width: 340px; }
-  .social { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
-  .social a { padding: 7px 13px; border: 1px solid var(--line-strong); border-radius: 999px; font-size: 13px; font-weight: 600; transition: border-color 0.2s, color 0.2s; }
-  .social a:hover { border-color: var(--accent); color: #fff; }
+  .about :global(.social) { margin-top: 18px; }
   h2 { font-family: var(--font); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; }
   nav, .contacts { display: flex; flex-direction: column; gap: 9px; font-size: 14.5px; }
   nav a { color: #d4d3cf; width: fit-content; background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 1px no-repeat; transition: background-size 0.3s var(--ease), color 0.2s; }
   nav a:hover { color: #fff; background-size: 100% 1px; }
-  .contacts a { display: flex; flex-direction: column; font-weight: 700; font-size: 16px; }
+  .contacts { gap: 12px; }
+  .contacts a { font-weight: 700; font-size: 16px; transition: color 0.2s; }
   .contacts a:hover { color: var(--gold); }
-  .contacts small { font-size: 12px; font-weight: 600; color: var(--muted); }
   .legal { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; padding: 20px 0 28px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--faint); }
   @media (max-width: 960px) { .cols { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .cols { grid-template-columns: 1fr; gap: 30px; padding-top: 40px; } }

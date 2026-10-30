@@ -7,9 +7,15 @@ import Faq from '../components/Faq.astro';
 import Consult from '../components/Consult.astro';
 import { productBySlug } from '../lib/catalog';
 import { faq } from '../data/faq';
+import ClipGrid from '../components/ClipGrid.astro';
+import ReviewGrid from '../components/ReviewGrid.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import { clips, photos, reviews } from '../data/media';
 
 const featured = ['kaban-650-lrf', 'moskit-650-lrf', 'kaban-650-lrf-pro', 'dovod-pro-660-lrf', 'moskit-335-lrf', 'sinica-630', 'snegir-640', 'strekoza-brf-2000']
   .map((slug) => productBySlug(slug)!);
+const homeClips = ['16825-v2', '16841-v0', '16649-v3', '16275-v1', '16494-v0', '16111-v0'].map((id) => clips.find((c) => c.id === id)!);
+const homeReviews = ['9mudS-DqfW8', 'icvMXAZno3g', 'xJ95-S7H7XQ', '_QK3hmjX774'].map((id) => reviews.find((r) => r.youtube === id)!);
 const kaban = productBySlug('kaban-650-lrf')!;
 const moskit = productBySlug('moskit-650-lrf')!;
 const versus = [
@@ -73,6 +79,22 @@ const trust = [
     </div>
   </section>
 
+  <section class="section wrap" aria-labelledby="footage">
+    <div class="section-head">
+      <div><p class="eyebrow">Записи с прицелов</p><h2 id="footage">Как это выглядит ночью</h2></div>
+      <p>Реальные записи охотников: наведите курсор — ролик оживёт, нажмите — смотрите со звуком.</p>
+    </div>
+    <ClipGrid items={homeClips} group="home-clips" />
+  </section>
+
+  <section class="section wrap" aria-labelledby="reviews">
+    <div class="section-head">
+      <div><p class="eyebrow">Видеообзоры</p><h2 id="reviews">Разбираем приборы в деле</h2></div>
+      <a class="btn btn-ghost btn-sm" href="/video/">Все видео и фото</a>
+    </div>
+    <ReviewGrid items={homeReviews} />
+  </section>
+
   <section class="section wrap" aria-labelledby="versus">
     <div class="versus" data-glow>
       <div class="versus-head">
@@ -92,6 +114,14 @@ const trust = [
         ))}
       </div>
     </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="trophies">
+    <div class="section-head">
+      <div><p class="eyebrow">Охотники RikaNV</p><h2 id="trophies">Трофеи с новинками</h2></div>
+      <a class="btn btn-ghost btn-sm" href="https://t.me/clubRiKA" target="_blank" rel="noopener">Ещё в Telegram</a>
+    </div>
+    <PhotoGallery items={photos.slice(0, 8)} group="home-photos" />
   </section>
 
   <section class="section wrap" aria-labelledby="faq-title">
