@@ -5,3 +5,8 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+# Временные адреса Cloudflare не индексируем: основной сайт — infrahunt.ru.
+https://infrahunt.pages.dev/*
+  X-Robots-Tag: noindex
+https://:version.infrahunt.pages.dev/*
+  X-Robots-Tag: noindex
