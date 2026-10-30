@@ -26,7 +26,7 @@ export const clips: Clip[] = [
   { id: '16666-v2', title: 'Ночная охота на лисицу с Moskit 650 LRF — Олег Крупица', line: 'moskit', product: 'moskit-650-lrf', w: 960, h: 720, duration: 30, date: '2026-10-21', post: tg(16666) },
   { id: '16611-v1', title: 'Косули на поле — Moskit 650 LRF', line: 'moskit', product: 'moskit-650-lrf', w: 848, h: 624, duration: 30, date: '2026-10-18', post: tg(16611) },
   { id: '16611-v0', title: 'Палитра «красный» — Moskit 650 LRF', line: 'moskit', product: 'moskit-650-lrf', w: 848, h: 624, duration: 20, date: '2026-10-18', post: tg(16611) },
-  { id: '16275-v1', title: 'Волк в прицеле Dovod PRO — кадры с реальной охоты', line: 'dovod-pro', w: 848, h: 848, duration: 27, date: '2026-10-03', post: tg(16275) },
+  { id: '16275-v1', title: 'Кабан в прицеле Dovod PRO — кадры с реальной охоты', line: 'dovod-pro', w: 848, h: 848, duration: 27, date: '2026-10-03', post: tg(16275) },
   { id: '16266-v0', title: 'Dovod PRO: работа дальномера, Максим Резников', line: 'dovod-pro', w: 848, h: 848, duration: 27, date: '2026-10-02', post: tg(16266) },
   { id: '16773-v2', title: 'Мультиспектральный бинокль Snegir 1280 на охоте — Александр Шкапцов', line: 'snegir', product: 'snegir-1280', w: 960, h: 540, duration: 21, date: '2026-10-26', post: tg(16773) },
 ];
