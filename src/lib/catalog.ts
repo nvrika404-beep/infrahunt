@@ -48,7 +48,22 @@ export function formatValue(value: string): string {
     .replace(/(\d)\s*X\b/g, '$1×')
     .replace(/(\d)-(\d)/g, '$1–$2')
     .replace(/℃/g, ' °C')
-    .replace(/^riflescope$/, 'прицел');
+    .replace(/(\d)\s*inch\b/g, '$1″')
+    .replace(/^riflescope$/, 'прицел')
+    .replace(/Quick-detach Picatinny rail \(Install using (\d) (M[\d×]+) screws\)/, 'Быстросъёмный кронштейн на планку Пикатинни, ставится на $1 винта $2')
+    .replace(/Power Supply \((\d)V\/(\d)A or (\d)A\), Data/, 'Питание $1 В ($2–$3 А) и передача данных')
+    // Одинаковая запись чисел и сравнений: 0,8 вместо 0.8, «от 7 ч» вместо «≥7h», «±1 м» вместо «≤ ±1 м».
+    .replace(/(?<![A-Za-z\d.]|Bluetooth |USB )(\d+)\.(\d+)/g, '$1,$2')
+    .replace(/(\d)\s*~\s*([+-]?\d)/g, '$1…$2')
+    .replace(/~\s*(?=\d)/g, '≈ ')
+    .replace(/(^|[;,]\s*)[≤<]\s*±\s*/g, '$1±')
+    .replace(/(^|[;,]\s*)[≥>]\s*/g, '$1от ')
+    .replace(/(^|[;,]\s*)[≤<]\s*/g, '$1до ')
+    .replace(/([≥≤<>])(?=\d)/g, '$1 ')
+    .replace(/(^|[\s(…])-(?=\d)/g, '$1−')
+    .replace(/(\d)\s*%/g, '$1 %')
+    // Температурный диапазон всегда в виде «−40…+60 °C».
+    .replace(/(?:от\s)?([−+]?\d+) °C\s*(?:[—–-]|до)\s*([−+]?\d+) °C/g, '$1…$2 °C');
 }
 
 const HIDDEN_ROWS = new Set(['Форм-фактор', 'Дальность обнаружения по критерию Джонсона']);

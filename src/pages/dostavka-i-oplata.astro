@@ -106,7 +106,7 @@ const deliveryFaq = faq.filter(([q]) => /оплатить|доставляете
   .num { position: absolute; right: 18px; top: 14px; font-family: var(--display); font-size: 34px; font-weight: 600; color: rgba(255, 255, 255, 0.07); transition: color 0.3s; }
   .step:hover .num { color: rgba(255, 122, 26, 0.35); }
   .step-icon, .m-icon { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--bg); border: 1px solid var(--line-strong); color: var(--accent-2); transition: background 0.35s, color 0.3s, transform 0.45s var(--ease); }
-  .step:hover .step-icon, .method:hover .m-icon, .pay-card:hover .m-icon { background: var(--heat); color: #fff; border-color: transparent; transform: rotate(-6deg) scale(1.06); }
+  .step:hover .step-icon, .method:hover .m-icon, .pay-card:hover .m-icon { background: var(--heat) border-box; color: #fff; border-color: transparent; transform: rotate(-6deg) scale(1.06); }
   .step b { font-family: var(--display); font-weight: 600; font-size: 18px; margin-top: 6px; }
   .step p, .method p, .pay-card p { color: #cfcdc8; font-size: 14.5px; }
 

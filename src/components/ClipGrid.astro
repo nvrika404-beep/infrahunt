@@ -54,7 +54,7 @@ const mmss = (s: number) => `0:${String(s).padStart(2, '0')}`;
   .dur { position: absolute; right: 12px; bottom: 12px; padding: 3px 8px; border-radius: 6px; background: rgba(0, 0, 0, 0.6); font: 700 12px/1.4 var(--font); }
   .play { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: rgba(11, 12, 15, 0.55); border: 1px solid rgba(255, 255, 255, 0.35); backdrop-filter: blur(6px); transition: transform 0.4s var(--ease), background 0.3s, opacity 0.3s; }
   .play :global(.icon) { margin-left: 3px; }
-  .clip:hover .play { background: var(--heat); border-color: transparent; transform: scale(1.1); }
+  .clip:hover .play { background: var(--heat) border-box; border-color: transparent; transform: scale(1.1); }
   .clip.is-playing .play { opacity: 0; }
   .meta { display: flex; flex-direction: column; gap: 4px; padding: 0 16px; }
   .line { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-2); }
