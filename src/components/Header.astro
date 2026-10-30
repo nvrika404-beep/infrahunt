@@ -19,6 +19,7 @@ const nav = [
     <div class="wrap topbar-inner">
       <span>Официальная продукция RikaNV · доставка по всей России</span>
       <span class="topbar-links">
+        <button class="tl tl-call" type="button" data-lead="callback"><Icon name="phone" size={15} />Перезвоните мне</button>
         <a class="tl" data-brand="whatsapp" href={site.whatsapp} target="_blank" rel="noopener"><Icon name="whatsapp" size={15} />WhatsApp</a>
         <a class="tl" data-brand="telegram" href={site.telegram} target="_blank" rel="noopener"><Icon name="telegram" size={15} />Telegram</a>
         <a class="tl" href={`mailto:${site.email}`}><Icon name="mail" size={15} />{site.email}</a>
@@ -79,6 +80,7 @@ const nav = [
           <a class="contact-line" href={p.href}><span class="ci"><Icon name={i === 2 ? 'support' : 'phone'} size={18} /></span><span class="ct"><small>{p.label}</small>{p.display}</span></a>
         ))}
         <a class="contact-line" href={`mailto:${site.email}`}><span class="ci"><Icon name="mail" size={18} /></span><span class="ct"><small>Почта</small>{site.email}</span></a>
+        <button class="btn btn-primary" type="button" data-lead="callback"><Icon name="phone" size={18} />Заказать звонок</button>
         <Social size="sm" />
       </div>
     </div>
@@ -96,6 +98,7 @@ const nav = [
     document.body.classList.toggle('menu-open', open);
   };
   burger?.addEventListener('click', () => setOpen(drawer?.hidden ?? false));
+  drawer?.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('[data-lead]')) setOpen(false); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
   window.matchMedia('(min-width: 1025px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
 </script>
@@ -112,6 +115,8 @@ const nav = [
   .tl[data-brand='whatsapp']:hover :global(.icon) { color: #25d366; }
   .tl[data-brand='telegram']:hover :global(.icon) { color: #2aabee; }
   .tl:not([data-brand]):hover :global(.icon) { color: var(--accent-2); }
+  .tl-call { padding: 0; border: 0; background: none; color: var(--gold); font: inherit; font-weight: 700; }
+  .tl-call:hover :global(.icon) { animation: ring 0.7s ease-in-out; }
   .bar { display: flex; align-items: center; gap: 28px; height: 72px; }
   .brand { display: flex; align-items: center; gap: 12px; flex: none; }
   .brand-mark { display: grid; place-items: center; width: 64px; height: 44px; border-radius: 12px; background: #f6f3ee; padding: 4px 6px; transition: transform 0.3s var(--ease); }

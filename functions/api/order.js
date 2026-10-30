@@ -1,13 +1,36 @@
-// Cloudflare Pages Function: принимает заказ из корзины и пересылает его в Telegram.
+// Cloudflare Pages Function: принимает заявки с сайта и пересылает их в Telegram.
 // Переменные окружения (Cloudflare → Pages → Settings → Variables and Secrets):
 //   TELEGRAM_BOT_TOKEN — токен бота от @BotFather (секрет, в код не добавлять);
-//   TELEGRAM_CHAT_ID   — id чата или группы, куда приходят заказы.
+//   TELEGRAM_CHAT_ID   — id чата или группы, куда приходят заявки.
 import catalog from '../../src/data/catalog.json';
 
 const products = new Map(catalog.map((p) => [p.slug, p]));
+const SITE = 'https://infrahunt.ru';
+const TYPES = {
+  cart: '🛒 Заказ из корзины',
+  quick: '⚡ Покупка в 1 клик',
+  price: '💬 Запрос цены',
+  callback: '📞 Заказ звонка',
+};
+const MIN_FILL_MS = 1200; // Боты отправляют форму за миллисекунды; человеку даже с автозаполнением нужно больше секунды.
+
 const clean = (value, max) => String(value ?? '').replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '').trim().slice(0, max);
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
+const money = (n) => `${n.toLocaleString('ru-RU')} ₽`;
+
+// Номер для ссылки wa.me: только цифры, российские 8… и 10-значные приводим к 7….
+function whatsappNumber(digits) {
+  if (digits.length === 11 && digits.startsWith('8')) return `7${digits.slice(1)}`;
+  if (digits.length === 10) return `7${digits}`;
+  return digits;
+}
+
+// Принимаем только путь на нашем сайте, чтобы в сообщение не попала чужая ссылка.
+function pageUrl(value) {
+  const path = clean(value, 200);
+  return /^\/[\w\-/.%?=&]*$/.test(path) ? SITE + path : null;
+}
 
 export async function onRequestPost({ request, env }) {
   if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) return json({ ok: false, error: 'not_configured' }, 503);
@@ -19,9 +42,10 @@ export async function onRequestPost({ request, env }) {
   } catch {
     return json({ ok: false, error: 'bad_json' }, 400);
   }
-  // Поле-ловушка: человек его не видит и не заполняет.
-  if (clean(data.website, 200)) return json({ ok: true, id: 'IH-0' });
+  // Ловушки для ботов: скрытое поле и слишком быстрое заполнение. Боту отвечаем «успехом», чтобы не подбирал обход.
+  if (clean(data.website, 200) || Number(data.elapsed) < MIN_FILL_MS) return json({ ok: true, id: 'IH-0' });
 
+  const type = Object.hasOwn(TYPES, data.type) ? data.type : 'cart';
   const name = clean(data.name, 80);
   const phone = clean(data.phone, 24);
   const digits = phone.replace(/\D/g, '');
@@ -31,23 +55,30 @@ export async function onRequestPost({ request, env }) {
     .slice(0, 20)
     .map((i) => ({ product: products.get(String(i.slug)), qty: Math.max(1, Math.min(99, Number.parseInt(i.qty, 10) || 1)) }))
     .filter((i) => i.product);
-  if (!items.length) return json({ ok: false, error: 'empty' }, 422);
+  if (!items.length && type !== 'callback') return json({ ok: false, error: 'empty' }, 422);
 
   // Цены считаем на сервере, а не берём из браузера.
-  const money = (n) => `${n.toLocaleString('ru-RU')} ₽`;
   const total = items.reduce((sum, i) => sum + (i.product.price ?? 0) * i.qty, 0);
   const id = `IH-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+  const city = clean(data.city, 80);
+  const comment = clean(data.comment, 1000);
+  const page = pageUrl(data.page);
+  const source = clean(data.source, 160);
   const text = [
-    `🛒 Заказ ${id} с infrahunt.ru`,
-    '',
+    `${TYPES[type]} · ${id}`,
+    items.length ? '' : null,
     ...items.map((i) => `• ${i.product.name} × ${i.qty} — ${i.product.price ? money(i.product.price * i.qty) : 'цена по запросу'}`),
+    total ? `Итого: ${money(total)}${items.some((i) => !i.product.price) ? ' + позиции по запросу' : ''}` : null,
     '',
-    `Итого: ${money(total)}${items.some((i) => !i.product.price) ? ' + позиции по запросу' : ''}`,
-    `Имя: ${name}`,
-    `Телефон: ${phone}`,
-    clean(data.city, 80) ? `Город: ${clean(data.city, 80)}` : null,
-    clean(data.comment, 1000) ? `Комментарий: ${clean(data.comment, 1000)}` : null,
-  ].filter((line) => line !== null).join('\n');
+    `👤 ${name}`,
+    `📱 ${phone}`,
+    `💬 Написать в WhatsApp: https://wa.me/${whatsappNumber(digits)}`,
+    city ? `🏙 ${city}` : null,
+    comment ? `📝 ${comment}` : null,
+    '',
+    page ? `Страница: ${page}` : null,
+    source ? `Откуда пришёл: ${source}` : null,
+  ].filter((line) => line !== null).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 
   const telegram = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
     method: 'POST',

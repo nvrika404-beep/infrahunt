@@ -26,9 +26,15 @@ const [first, second] = p.images;
         <button class="round" type="button" data-toggle-compare={p.slug} aria-pressed="false" title="Сравнить" aria-label={`Сравнить ${p.name}`}>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7" /></svg>
         </button>
-        <button class="round round-cart" type="button" data-add-cart={p.slug} title="В корзину" aria-label={`Добавить ${p.name} в корзину`}>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.3 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2" /><path d="M14 10v4M12 12h4" /></svg>
-        </button>
+        {p.price ? (
+          <button class="round round-cart" type="button" data-add-cart={p.slug} title="В корзину" aria-label={`Добавить ${p.name} в корзину`}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2.2l2.3 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2" /><path d="M14 10v4M12 12h4" /></svg>
+          </button>
+        ) : (
+          <button class="round round-cart" type="button" data-lead="price" data-slug={p.slug} title="Узнать цену" aria-label={`Узнать цену ${p.name}`}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z" /><path d="M9 10.5h6" /></svg>
+          </button>
+        )}
       </div>
     </div>
   </div>

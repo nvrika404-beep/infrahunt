@@ -53,6 +53,7 @@ const data = clientData().map(({ slug, name, url, img, price, priceText }) => ({
 
 <script>
   import { store } from '../scripts/store';
+  import { formatPhone, sendLead, validate } from '../scripts/lead';
 
   type Item = { slug: string; name: string; url: string; img: string; price: number | null; priceText: string };
   const all: Item[] = JSON.parse(document.getElementById('cart-data')!.textContent!);
@@ -100,45 +101,38 @@ const data = clientData().map(({ slug, name, url, img, price, priceText }) => ({
       .filter(Boolean).join('\n');
   };
 
+  // Время заполнения считаем с первого касания формы: боты отправляют её мгновенно.
+  let startedAt = 0;
+  form.addEventListener('focusin', () => { startedAt ||= performance.now(); });
+  const phoneInput = form.querySelector<HTMLInputElement>('input[name="phone"]')!;
+  phoneInput.addEventListener('blur', () => (phoneInput.value = formatPhone(phoneInput.value)));
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = new FormData(form);
     const name = String(f.get('name') ?? '').trim();
-    const phone = String(f.get('phone') ?? '').trim();
-    const digits = phone.replace(/\D/g, '');
-    error.textContent =
-      name.length < 2 ? 'Укажите имя.'
-      : digits.length < 10 || digits.length > 15 ? 'Проверьте номер телефона.'
-      : !f.get('consent') ? 'Нужно согласие на обработку данных.'
-      : '';
+    const phone = formatPhone(String(f.get('phone') ?? ''));
+    error.textContent = validate(name, phone, Boolean(f.get('consent')));
     if (error.textContent) return;
     const submit = $<HTMLButtonElement>('[data-submit]');
     submit.disabled = true;
     submit.textContent = 'Отправляем…';
-    try {
-      const response = await fetch('/api/order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name, phone, city: f.get('city'), comment: f.get('comment'), website: f.get('website'),
-          items: lines().map((r) => ({ slug: r.slug, qty: r.qty })),
-        }),
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || !result.ok) throw new Error(result.error || 'send_failed');
+    const result = await sendLead({
+      type: 'cart', name, phone, city: String(f.get('city') ?? ''), comment: String(f.get('comment') ?? ''), website: String(f.get('website') ?? ''),
+      items: lines().map((r) => ({ slug: r.slug, qty: r.qty })), elapsed: startedAt ? Math.round(performance.now() - startedAt) : 0,
+    });
+    submit.disabled = false;
+    submit.textContent = 'Отправить заказ';
+    if (result.ok) {
       $('[data-order-id]').textContent = result.id;
       form.hidden = true;
+      $('[data-fallback]').hidden = true;
       $('[data-done]').hidden = false;
       $('[data-done]').focus();
       store.setCart([]);
-      (window as any).ym?.(Number(import.meta.env.PUBLIC_YANDEX_METRIKA_ID), 'reachGoal', 'order');
-    } catch {
-      const wa = $<HTMLAnchorElement>('[data-wa]');
-      wa.href = `${whatsapp}?text=${encodeURIComponent(orderText(f))}`;
+    } else {
+      $<HTMLAnchorElement>('[data-wa]').href = `${whatsapp}?text=${encodeURIComponent(orderText(f))}`;
       $('[data-fallback]').hidden = false;
-    } finally {
-      submit.disabled = false;
-      submit.textContent = 'Отправить заказ';
     }
   });
 

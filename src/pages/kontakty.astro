@@ -22,7 +22,10 @@ const requisites = [
         <p class="eyebrow">На связи</p>
         <h1>Контакты</h1>
       </div>
-      <p class="muted">Консультируем по выбору, настройке и пристрелке приборов RikaNV. Звоните или пишите в мессенджеры — ответим в рабочее время.</p>
+      <div class="head-side">
+        <p class="muted">Консультируем по выбору, настройке и пристрелке приборов RikaNV. Звоните или пишите в мессенджеры — ответим в рабочее время.</p>
+        <button class="btn btn-primary" type="button" data-lead="callback"><Icon name="phone" size={18} />Заказать обратный звонок</button>
+      </div>
     </header>
 
     <section class="phones" aria-label="Телефоны">
@@ -79,6 +82,7 @@ const requisites = [
 </script>
 
 <style>
+  .head-side { display: grid; gap: 16px; justify-items: start; }
   .head { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end; padding: 18px 0 32px; }
   .head h1 { margin-top: 12px; }
   .card { --mx: 50%; --my: 50%; position: relative; border-radius: var(--radius); border: 1px solid var(--line); padding: 22px; overflow: hidden; isolation: isolate;
