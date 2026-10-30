@@ -11,6 +11,8 @@ const items = [
   { key: 'max', label: 'MAX', href: site.max },
   { key: 'vk', label: 'ВКонтакте', href: site.vk },
   { key: 'youtube', label: 'YouTube', href: site.youtube },
+  // Звёздочка обязательна: сноска о Meta стоит внизу каждой страницы.
+  { key: 'instagram', label: 'Instagram*', href: site.instagram },
 ] as const;
 ---
 <div class:list={['social', `social-${size}`, { 'social-icons': !labels }]}>
