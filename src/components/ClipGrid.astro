@@ -10,7 +10,7 @@ const mmss = (s: number) => `0:${String(s).padStart(2, '0')}`;
 <div class="clips">
   {items.map((c) => (
     <button type="button" class="clip" data-group={group} data-line={c.line} data-glow
-      data-media={JSON.stringify({ type: 'video', src: clipSrc(c), poster: clipPoster(c), title: c.title, links: [{ label: 'Пост в Telegram', href: c.post }] })}>
+      data-media={JSON.stringify({ type: 'video', src: clipSrc(c), poster: clipPoster(c), title: c.title, links: c.post ? [{ label: 'Пост в Telegram', href: c.post }] : [] })}>
       <span class="frame">
         <img src={clipPoster(c)} width={c.w} height={c.h} alt={c.title} loading="lazy" decoding="async" />
         <video muted loop playsinline preload="none" data-preview={clipSrc(c)} aria-hidden="true"></video>

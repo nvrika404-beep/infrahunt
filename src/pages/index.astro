@@ -14,7 +14,7 @@ import { clips, photos, reviews } from '../data/media';
 
 const featured = ['kaban-650-lrf', 'moskit-650-lrf', 'kaban-650-lrf-pro', 'dovod-pro-660-lrf', 'moskit-335-lrf', 'sinica-630', 'snegir-640', 'strekoza-brf-2000']
   .map((slug) => productBySlug(slug)!);
-const homeClips = ['16825-v2', '16841-v0', '16649-v3', '16275-v1', '16494-v0', '16111-v0'].map((id) => clips.find((c) => c.id === id)!);
+const homeClips = ['kaban-650-boar-shot', '16841-v0', '16649-v3', 'kaban-650-boar-28m', '16275-v1', '16494-v0'].map((id) => clips.find((c) => c.id === id)!);
 const homeReviews = ['9mudS-DqfW8', 'icvMXAZno3g', 'xJ95-S7H7XQ', '_QK3hmjX774'].map((id) => reviews.find((r) => r.youtube === id)!);
 const kaban = productBySlug('kaban-650-lrf')!;
 const moskit = productBySlug('moskit-650-lrf')!;

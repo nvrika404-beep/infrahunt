@@ -12,13 +12,13 @@ export interface Clip {
   h: number;
   duration: number;
   date: string;
-  post: string;
+  post?: string; // пост в Telegram, если ролик оттуда
 }
 
 export const clips: Clip[] = [
+  { id: 'kaban-650-boar-shot', title: 'Выход кабана и выстрел на 92 м — Kaban 650 LRF, окно PiP', line: 'kaban', product: 'kaban-650-lrf', w: 960, h: 720, duration: 39, date: '2026-10-30' },
+  { id: 'kaban-650-boar-28m', title: 'Кабан на 28 м: палитры «красный» и «белый горячий» — Kaban 650 LRF', line: 'kaban', product: 'kaban-650-lrf', w: 960, h: 720, duration: 40, date: '2026-10-30' },
   { id: '16825-v2', title: 'Лось в прицеле Kaban 650 LRF — Евгений Голубев, конкурс «Золотой олень»', line: 'kaban', product: 'kaban-650-lrf', w: 848, h: 624, duration: 30, date: '2026-10-28', post: tg(16825) },
-  { id: '16111-v0', title: 'Кабан в густом тумане — первая добыча с Kaban 650 LRF', line: 'kaban', product: 'kaban-650-lrf', w: 848, h: 624, duration: 30, date: '2026-09-25', post: tg(16111) },
-  { id: '16717-v1', title: 'Самец косули — Kaban 650 LRF, Евгений Голубев', line: 'kaban', product: 'kaban-650-lrf', w: 848, h: 624, duration: 30, date: '2026-10-24', post: tg(16717) },
   { id: '16649-v3', title: 'Kaban 650 LRF PRO на полигоне: замер 1006 м и автобаллистика', line: 'kaban', product: 'kaban-650-lrf-pro', w: 848, h: 624, duration: 30, date: '2026-10-20', post: tg(16649) },
   { id: '16564-v0', title: 'Kaban 650 LRF PRO в городе: замеры среди множества тепловых объектов', line: 'kaban', product: 'kaban-650-lrf-pro', w: 848, h: 624, duration: 30, date: '2026-10-15', post: tg(16564) },
   { id: '16841-v0', title: 'Стадо косуль — Moskit 650 LRF', line: 'moskit', product: 'moskit-650-lrf', w: 848, h: 624, duration: 26, date: '2026-10-29', post: tg(16841) },
@@ -28,7 +28,7 @@ export const clips: Clip[] = [
   { id: '16611-v0', title: 'Палитра «красный» — Moskit 650 LRF', line: 'moskit', product: 'moskit-650-lrf', w: 848, h: 624, duration: 20, date: '2026-10-18', post: tg(16611) },
   { id: '16275-v1', title: 'Волк в прицеле Dovod PRO — кадры с реальной охоты', line: 'dovod-pro', w: 848, h: 848, duration: 27, date: '2026-10-03', post: tg(16275) },
   { id: '16266-v0', title: 'Dovod PRO: работа дальномера, Максим Резников', line: 'dovod-pro', w: 848, h: 848, duration: 27, date: '2026-10-02', post: tg(16266) },
-  { id: '16494-v0', title: 'Ростовая цель на 2300 м ночью — насадка Ehidna на турнире в Якутии', line: 'ehidna', product: 'ehidna-g-ec-1', w: 960, h: 540, duration: 30, date: '2026-10-11', post: tg(16494) },
+  { id: '16494-v0', title: 'Ночной этап турнира в Якутии: мишень на 2300 м, стрелки RikaNV с насадкой Ehidna', line: 'ehidna', product: 'ehidna-g-ec-1', w: 960, h: 540, duration: 30, date: '2026-10-11', post: tg(16494) },
   { id: '16773-v2', title: 'Мультиспектральный бинокль Snegir 1280 на охоте — Александр Шкапцов', line: 'snegir', product: 'snegir-1280', w: 960, h: 540, duration: 21, date: '2026-10-26', post: tg(16773) },
 ];
 
