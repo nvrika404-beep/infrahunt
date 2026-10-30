@@ -106,6 +106,7 @@ p { margin: 0; }
 }
 .soc[data-brand='whatsapp'] { --brand: #25d366; }
 .soc[data-brand='telegram'] { --brand: #2aabee; }
+.soc[data-brand='max'] { --brand: #5a22fe; }
 .soc[data-brand='vk'] { --brand: #0077ff; }
 .soc[data-brand='youtube'] { --brand: #ff0033; }
 .soc::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--brand); opacity: 0.14; transform: translateX(-101%); transition: transform 0.45s var(--ease); }
@@ -113,6 +114,8 @@ p { margin: 0; }
 .soc:hover { border-color: var(--brand); transform: translateY(-2px); }
 .soc:hover::before { transform: none; }
 .soc:hover .soc-icon { background: var(--brand); color: #fff; animation: soc-pop 0.6s var(--ease); }
+/* У MAX фирменный градиент от голубого к фиолетовому. */
+.soc[data-brand='max']:hover .soc-icon { background: linear-gradient(135deg, #00eaff, #3c22fe 55%, #8419ff) border-box; }
 .social-sm .soc { padding: 3px 11px 3px 3px; font-size: 12.5px; gap: 7px; }
 .social-sm .soc-icon { width: 26px; height: 26px; }
 .social-icons .soc { padding: 0; border: 0; }

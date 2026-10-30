@@ -15,6 +15,7 @@ export const site = {
   returnsEmail: 'klipatskaya.a@yandex.ru',
   whatsapp: 'https://wa.me/79611707722',
   telegram: 'https://t.me/+Qa3PFBKWT5dmZTYy',
+  max: 'https://max.ru/join/-2O7dXM8GTNl1-RzVlt6hA-09a-p0GUQMCQ2jUwb5HU',
   vk: 'https://vk.com/infrahunt',
   youtube: 'https://www.youtube.com/@ivanklipatskiy',
   address: {
