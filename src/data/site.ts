@@ -17,6 +17,7 @@ export const site = {
   telegram: 'https://t.me/+Qa3PFBKWT5dmZTYy',
   max: 'https://max.ru/join/-2O7dXM8GTNl1-RzVlt6hA-09a-p0GUQMCQ2jUwb5HU',
   instagram: 'https://www.instagram.com/ivanklipatsky/',
+  rutube: 'https://rutube.ru/channel/28204144/',
   vk: 'https://vk.com/infrahunt',
   youtube: 'https://www.youtube.com/@ivanklipatskiy',
   address: {

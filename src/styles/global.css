@@ -108,6 +108,7 @@ p { margin: 0; }
 .soc[data-brand='telegram'] { --brand: #2aabee; }
 .soc[data-brand='max'] { --brand: #5a22fe; }
 .soc[data-brand='instagram'] { --brand: #e1306c; }
+.soc[data-brand='rutube'] { --brand: #ed143b; }
 .soc[data-brand='vk'] { --brand: #0077ff; }
 .soc[data-brand='youtube'] { --brand: #ff0033; }
 .soc::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--brand); opacity: 0.14; transform: translateX(-101%); transition: transform 0.45s var(--ease); }
@@ -117,6 +118,9 @@ p { margin: 0; }
 .soc:hover .soc-icon { background: var(--brand); color: #fff; animation: soc-pop 0.6s var(--ease); }
 /* У MAX фирменный градиент от голубого к фиолетовому. */
 .soc[data-brand='instagram']:hover .soc-icon { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%) border-box; }
+/* RuTube: белая R с красной точкой, при наведении — фирменный тёмно-синий фон, как на значке приложения. */
+.soc[data-brand='rutube'] .soc-icon { color: #fff; }
+.soc[data-brand='rutube']:hover .soc-icon { background: #100943; }
 .soc[data-brand='max']:hover .soc-icon { background: linear-gradient(135deg, #00eaff, #3c22fe 55%, #8419ff) border-box; }
 .social-sm .soc { padding: 3px 11px 3px 3px; font-size: 12.5px; gap: 7px; }
 .social-sm .soc-icon { width: 26px; height: 26px; }
