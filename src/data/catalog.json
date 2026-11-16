@@ -1536,7 +1536,7 @@
   "price": 139800,
   "price_rikasale": 139800,
   "price_rikanv": 139800,
-  "availability": "BackOrder",
+  "availability": "InStock",
   "groups": [
    {
     "title": "Тепловизионный модуль",
@@ -2329,10 +2329,10 @@
   "category": "pricely",
   "name": "RikaNV Dovod Pro 660 LRF",
   "description": "Тепловизионный прицел RikaNV Dovod Pro 660 LRF на матрице 640×512 с германиевым объективом 60 мм F0.9, лазерным дальномером 10–3 000 м с точностью ±1 м и баллистическим калькулятором по одному нажатию клавиши дальномера. Высшая линейка тепловизионных прицелов RikaNV.",
-  "price": null,
+  "price": 563900,
   "price_rikasale": null,
   "price_rikanv": null,
-  "availability": null,
+  "availability": "InStock",
   "groups": [
    {
     "title": "Тепловизионный модуль",
@@ -2707,7 +2707,7 @@
    }
   ],
   "source": "https://rikanv.ru/catalog/teplovizionnye-pritsely/rikanv-dovod-pro-660-lrf",
-  "rikasale": null
+  "rikasale": "https://rikasale.ru/product/rikanv_dovod_pro_660_lrf/"
  },
  {
   "slug": "dovod-pro-1275-lrf",
@@ -2715,10 +2715,10 @@
   "category": "pricely",
   "name": "RikaNV Dovod Pro 1275 LRF",
   "description": "Тепловизионный прицел RikaNV Dovod Pro 1275 LRF на матрице 1280×1024 с германиевым объективом 75 мм F1.0, полем зрения 11,7°×9,3°, лазерным дальномером 10–3 000 м с точностью ±1 м и баллистическим калькулятором по одному нажатию клавиши дальномера. Высшая линейка тепловизионных прицелов RikaNV.",
-  "price": null,
+  "price": 798900,
   "price_rikasale": null,
   "price_rikanv": null,
-  "availability": null,
+  "availability": "InStock",
   "groups": [
    {
     "title": "Тепловизионный модуль",
@@ -3093,7 +3093,7 @@
    }
   ],
   "source": "https://rikanv.ru/catalog/teplovizionnye-pritsely/rikanv-dovod-pro-1275-lrf",
-  "rikasale": null
+  "rikasale": "https://rikasale.ru/product/rikanv_dovod_pro_1275_lrf/"
  },
  {
   "slug": "sinica-630",
