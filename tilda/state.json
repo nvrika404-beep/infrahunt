@@ -50,7 +50,7 @@
   "_footer/02-lead.html": {
    "id": 5869013403,
    "page": 391139403,
-   "hash": "2e8f30d68795bedd347d1bb77130e1c9"
+   "hash": "b887b103fec5e955fa9b93baa56be7ca"
   },
   "_footer/03-toast.html": {
    "id": 5869013603,
@@ -70,7 +70,7 @@
   "index/02-section.html": {
    "id": 5869014903,
    "page": 391139603,
-   "hash": "2f45aa3642a8de60f276d786a214100a"
+   "hash": "7819846c115de2265083ba74f54a8cd2"
   },
   "index/03-section.html": {
    "id": 5869015203,
@@ -80,7 +80,7 @@
   "index/04-section.html": {
    "id": 5869015303,
    "page": 391139603,
-   "hash": "46e6b8a63b7b08ae095ec39cff8bbc5e"
+   "hash": "240d193ee2dea0b3ae5cd5e314bafd95"
   },
   "index/05-section.html": {
    "id": 5869015503,
@@ -115,7 +115,7 @@
   "cart/02-layout.html": {
    "id": 5869035803,
    "page": 391151803,
-   "hash": "a14966f1b24a90cf5b554124c91e2472"
+   "hash": "a9a7886d0f91ea727441154aacb513ea"
   },
   "catalog__binokli/00-intro.html": {
    "id": 5869036003,
@@ -195,7 +195,7 @@
   "catalog/02-grid.html": {
    "id": 5869055703,
    "page": 391157503,
-   "hash": "cce0d13d03fd81464e0c2b441333503a"
+   "hash": "cea8fa03c03cf30cd6e9ae2ba75282ea"
   },
   "catalog/03-section.html": {
    "id": 5869055903,
@@ -220,7 +220,7 @@
   "catalog__teplovizionnye-pricely/02-grid.html": {
    "id": 5869056603,
    "page": 391157803,
-   "hash": "b3a75c352a2834081a5ccc1948b511de"
+   "hash": "920f427f21158a916d80f48b4bd011a7"
   },
   "catalog__teplovizionnye-pricely/03-section.html": {
    "id": 5869056703,
@@ -265,7 +265,7 @@
   "compare/03-table-wrap.html": {
    "id": 5869069303,
    "page": 391164403,
-   "hash": "3ae5065dfcbd5ac08523b6b1bf958c87"
+   "hash": "1a83976a6307d52b1b3eeb1045d547df"
   },
   "dostavka-i-oplata/00-intro.html": {
    "id": 5869069403,
@@ -340,7 +340,7 @@
   "product__rikanv-dovod-pro-1275-lrf/00-product.html": {
    "id": 5869083903,
    "page": 391170903,
-   "hash": "ab6dc281b7e0af4c498ed25ba1e917a6"
+   "hash": "a801d81b26cc432e9f489e4cfe48fe1a"
   },
   "product__rikanv-dovod-pro-1275-lrf/01-tabs.html": {
    "id": 5869084003,
@@ -365,7 +365,7 @@
   "product__rikanv-dovod-pro-1275-lrf/05-pohozhie.html": {
    "id": 5869084403,
    "page": 391170903,
-   "hash": "7571f4363011a0660549a26e03521764"
+   "hash": "94747b1eac5b816115bc4165b2fe0023"
   },
   "product__rikanv-dovod-pro-1275-lrf/06-section.html": {
    "id": 5869084503,
@@ -375,12 +375,12 @@
   "product__rikanv-dovod-pro-1275-lrf/07-sticky-buy.html": {
    "id": 5869084703,
    "page": 391170903,
-   "hash": "60f8b8c109bc247a7d2ef8c849bbded5"
+   "hash": "8a34be2e190d780c47aa7ad43fecf886"
   },
   "product__rikanv-dovod-pro-660-lrf/00-product.html": {
    "id": 5869086203,
    "page": 391172003,
-   "hash": "83761fb6b18b36409b45aa892a11b559"
+   "hash": "be001616ad96edc096bb5838a798a74a"
   },
   "product__rikanv-dovod-pro-660-lrf/01-tabs.html": {
    "id": 5869086303,
@@ -405,7 +405,7 @@
   "product__rikanv-dovod-pro-660-lrf/05-pohozhie.html": {
    "id": 5869112103,
    "page": 391172003,
-   "hash": "ca30b78f592f5c070d321e9342e692ec"
+   "hash": "8171d22c2a9514f574ea612d02603351"
   },
   "product__rikanv-dovod-pro-660-lrf/06-section.html": {
    "id": 5869112303,
@@ -415,7 +415,7 @@
   "product__rikanv-dovod-pro-660-lrf/07-sticky-buy.html": {
    "id": 5869112403,
    "page": 391172003,
-   "hash": "5becb5e7a9a2950c2d8898f54d3c2928"
+   "hash": "705bad4f3545226bbf02fbbe8e41a9d9"
   },
   "product__rikanv-kaban-335-lrf/00-product.html": {
    "id": 5869112603,
@@ -435,7 +435,7 @@
   "product__rikanv-kaban-335-lrf/03-video.html": {
    "id": 5869113203,
    "page": 391176903,
-   "hash": "75356f8b852ef29a7fe7a894f2800aba"
+   "hash": "68dd787f26facfffea49b022934ad62a"
   },
   "product__rikanv-kaban-335-lrf/04-harakteristiki.html": {
    "id": 5869113303,
@@ -445,7 +445,7 @@
   "product__rikanv-kaban-335-lrf/05-pohozhie.html": {
    "id": 5869113403,
    "page": 391176903,
-   "hash": "291d41ba000b779e8063c3e1991d2735"
+   "hash": "e58282c0100cf6acc9c3f36d70634393"
   },
   "product__rikanv-kaban-335-lrf/06-section.html": {
    "id": 5869113503,
@@ -475,7 +475,7 @@
   "product__rikanv-kaban-350-lrf/03-video.html": {
    "id": 5869126303,
    "page": 391178103,
-   "hash": "75356f8b852ef29a7fe7a894f2800aba"
+   "hash": "68dd787f26facfffea49b022934ad62a"
   },
   "product__rikanv-kaban-350-lrf/04-harakteristiki.html": {
    "id": 5869126503,
@@ -485,7 +485,7 @@
   "product__rikanv-kaban-350-lrf/05-pohozhie.html": {
    "id": 5869126703,
    "page": 391178103,
-   "hash": "6408078e52f332f09b6f33ee22d5316e"
+   "hash": "d681664c3d5a5590cd01c10cb592b23b"
   },
   "product__rikanv-kaban-350-lrf/06-section.html": {
    "id": 5869126803,
@@ -515,7 +515,7 @@
   "product__rikanv-kaban-650-lrf-pro/03-video.html": {
    "id": 5869127603,
    "page": 391182103,
-   "hash": "b2e2a1f89d38cb89ed6b08be0cc8bf64"
+   "hash": "6252d7574f6d19b02df81a44c8636df5"
   },
   "product__rikanv-kaban-650-lrf-pro/04-harakteristiki.html": {
    "id": 5869127803,
@@ -525,7 +525,7 @@
   "product__rikanv-kaban-650-lrf-pro/05-pohozhie.html": {
    "id": 5869127903,
    "page": 391182103,
-   "hash": "c877e682e70fe4dfa91fc7ac5dd0a9b6"
+   "hash": "0b93d5e10ae1d76e41daa0965ca7c4dc"
   },
   "product__rikanv-kaban-650-lrf-pro/06-section.html": {
    "id": 5869128003,
@@ -555,7 +555,7 @@
   "product__rikanv-kaban-650-lrf/03-video.html": {
    "id": 5869145403,
    "page": 391183203,
-   "hash": "75356f8b852ef29a7fe7a894f2800aba"
+   "hash": "68dd787f26facfffea49b022934ad62a"
   },
   "product__rikanv-kaban-650-lrf/04-harakteristiki.html": {
    "id": 5869145503,
@@ -565,7 +565,7 @@
   "product__rikanv-kaban-650-lrf/05-pohozhie.html": {
    "id": 5869145603,
    "page": 391183203,
-   "hash": "b6b7a11a2bf6d2c3946b30c84ac834ec"
+   "hash": "ccc579c85549801fd799630c01c46e91"
   },
   "product__rikanv-kaban-650-lrf/06-section.html": {
    "id": 5869145803,
@@ -580,7 +580,7 @@
   "product__rikanv-moskit-335-lrf/00-product.html": {
    "id": 5869146103,
    "page": 391187403,
-   "hash": "c5bca8fde31fb7853146345e7db8901c"
+   "hash": "33f7c9af3376c3d2093ffaf1d58276aa"
   },
   "product__rikanv-moskit-335-lrf/01-tabs.html": {
    "id": 5869146403,
@@ -595,7 +595,7 @@
   "product__rikanv-moskit-335-lrf/03-video.html": {
    "id": 5869146703,
    "page": 391187403,
-   "hash": "63b009694835507250bf41d4bf0f018d"
+   "hash": "14c3a3107bf3b0d299225c6ab3b16119"
   },
   "product__rikanv-moskit-335-lrf/04-harakteristiki.html": {
    "id": 5869146903,
@@ -635,7 +635,7 @@
   "product__rikanv-moskit-650-lrf/03-video.html": {
    "id": 5869169803,
    "page": 391188203,
-   "hash": "63b009694835507250bf41d4bf0f018d"
+   "hash": "14c3a3107bf3b0d299225c6ab3b16119"
   },
   "product__rikanv-moskit-650-lrf/04-harakteristiki.html": {
    "id": 5869169903,
@@ -645,7 +645,7 @@
   "product__rikanv-moskit-650-lrf/05-pohozhie.html": {
    "id": 5869170103,
    "page": 391188203,
-   "hash": "def23a8433db552723c8df2dfbebd5eb"
+   "hash": "104d5f35b9d537c10140c78bf2f243e4"
   },
   "product__rikanv-moskit-650-lrf/06-section.html": {
    "id": 5869170203,
@@ -705,7 +705,7 @@
   "product__rikanv-snegir-1280/03-video.html": {
    "id": 5869182603,
    "page": 391195303,
-   "hash": "c37968443e37802444afae6109ffe617"
+   "hash": "1903a3a990370e76801f43b80735f130"
   },
   "product__rikanv-snegir-1280/04-harakteristiki.html": {
    "id": 5869182703,
@@ -745,7 +745,7 @@
   "product__rikanv-snegir-640/03-video.html": {
    "id": 5869183703,
    "page": 391200703,
-   "hash": "c37968443e37802444afae6109ffe617"
+   "hash": "1903a3a990370e76801f43b80735f130"
   },
   "product__rikanv-snegir-640/04-harakteristiki.html": {
    "id": 5869183803,
@@ -785,7 +785,7 @@
   "product__rikanv-strekoza-brf-2000/03-video.html": {
    "id": 5869195303,
    "page": 391201503,
-   "hash": "da56aa6c71410426e2cc51645cfd3426"
+   "hash": "3ae9ea4659d04d1f65f89c062a4b9e88"
   },
   "product__rikanv-strekoza-brf-2000/04-harakteristiki.html": {
    "id": 5869195403,
@@ -825,7 +825,7 @@
   "product__rikanv-strekoza-brf-4000/03-video.html": {
    "id": 5869196703,
    "page": 391206503,
-   "hash": "0d40d999c738765dffd23cdcad7dc98d"
+   "hash": "40d7306d887f95e3b682722673d47310"
   },
   "product__rikanv-strekoza-brf-4000/04-harakteristiki.html": {
    "id": 5869196803,
@@ -850,17 +850,17 @@
   "video/00-intro.html": {
    "id": 5869210303,
    "page": 391207203,
-   "hash": "a785b94ce22feb8bc633d933ae32377c"
+   "hash": "fd6cf7372d9a4686266b5a6e5ad3c891"
   },
   "video/01-filters.html": {
    "id": 5869210403,
    "page": 391207203,
-   "hash": "d794f8c23127bb94c2ea966fb29b521b"
+   "hash": "d257e409a986c8ee080c19bdc8445b3c"
   },
   "video/02-block.html": {
    "id": 5869210503,
    "page": 391207203,
-   "hash": "2393688fe0698d4a123191c9b411d21b"
+   "hash": "c483adb93c4856c5ed430f56b2c38b0d"
   },
   "video/03-block.html": {
    "id": 5869210603,

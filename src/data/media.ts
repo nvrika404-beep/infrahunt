@@ -69,17 +69,19 @@ export interface Review {
 // Официальные обзоры — как на test.rika-nv.ru/#reviews, плюс выпуски канала youtube.com/@RikaNV.
 export const reviews: Review[] = [
   { youtube: 'H5MGRJyTUuM', title: 'Вся правда о мультиспектральном бинокле RikaNV Snegir 640: обзор с Иваном Клипацким', author: 'RikaNV', line: 'snegir', product: 'snegir-640', rutube: '6c317d0ad8b4d24d80d96c4a03f4f052', date: '2026-11-05' },
+  { youtube: 'tiBF4dtVYic', title: 'Непогода не помеха: Кирилл Силантьев тестирует RikaNV Kaban 650 LRF на дальних дистанциях', author: 'RikaNV', line: 'kaban', product: 'kaban-650-lrf', rutube: '956fefff372660cbbef900a93354d587', date: '2026-11-12' },
+  { youtube: 'qFAYk5S_4Tw', title: 'Трофей с 400 метров в темноте: добыча Кирилла Силантьева с RikaNV Kaban 650 LRF', author: 'RikaNV', line: 'kaban', product: 'kaban-650-lrf', rutube: 'acff490c6eed33891f3547a7f8bf29ce', date: '2026-10-30' },
   { youtube: '9mudS-DqfW8', title: 'Полный гид по RikaNV Kaban 650 LRF: настройки, меню и секреты от Ивана Клипацкого', author: 'RikaNV', line: 'kaban', product: 'kaban-650-lrf', rutube: '00a8283d5bccb874564c43b8266b1e47', vk: 'video-135836210_456246247', date: '2026-09-24' },
   { youtube: 'EVAayCh4rS8', title: 'RikaNV Kaban 650 LRF: убийца флагманов или компромисс? Разбор от Ивана Клипацкого', author: 'RikaNV', line: 'kaban', product: 'kaban-650-lrf' },
   { youtube: 'h5lLimnzhUc', title: 'RikaNV Kaban 650 LRF: первые впечатления и пристрелка', author: 'Саня на охоте', line: 'kaban', product: 'kaban-650-lrf' },
   { youtube: 'm4PYfPBPy80', title: 'Охота на лисицу с RikaNV Kaban 650 LRF в сильную влажность', author: 'Саня на охоте', line: 'kaban', product: 'kaban-650-lrf' },
   { youtube: 'nLCKB160p9E', title: 'Охота на лисицу с RikaNV Kaban 650 LRF: работаем на результат', author: 'Саня на охоте', line: 'kaban', product: 'kaban-650-lrf' },
   { youtube: 'hewjeDHhYbo', title: 'Охота на крупного кабана с .223 Rem и прицелом RikaNV Kaban 650 LRF', author: 'Саня на охоте', line: 'kaban', product: 'kaban-650-lrf' },
-  { youtube: 'icvMXAZno3g', title: 'RikaNV Moskit 650 LRF против 300 метров: экзамен в тире с экспертами', author: 'RikaNV', line: 'moskit', product: 'moskit-650-lrf', vk: 'video-135836210_456246348', date: '2026-10-08' },
-  { youtube: 'NDHBFtbc3O0', title: 'Первый тест RikaNV Strekoza: Евгений Голубев замеряет 300 метров', author: 'RikaNV', line: 'strekoza' },
+  { youtube: 'icvMXAZno3g', title: 'RikaNV Moskit 650 LRF против 300 метров: экзамен в тире с экспертами', author: 'RikaNV', line: 'moskit', product: 'moskit-650-lrf', vk: 'video-135836210_456246348', date: '2026-10-08', rutube: 'fb8b9daa2a912d7554747181ad160142' },
+  { youtube: 'NDHBFtbc3O0', title: 'Первый тест RikaNV Strekoza: Евгений Голубев замеряет 300 метров', author: 'RikaNV', line: 'strekoza', rutube: 'd912529a43ac90f72c2a35a119e3c723' },
   { youtube: 'xJ95-S7H7XQ', title: 'RikaNV Strekoza BRF-2000: баллистика в смартфоне и первый обзор с Иваном Клипацким', author: 'RikaNV', line: 'strekoza', product: 'strekoza-brf-2000', rutube: 'a48f3372797f4ea9d8d939f4c1d494b8', vk: 'video-135836210_456246429', date: '2026-10-20' },
   { youtube: '_QK3hmjX774', title: '1500 метров: сможет ли RikaNV Strekoza BRF-2000? Тест на полигоне', author: 'RikaNV', line: 'strekoza', product: 'strekoza-brf-2000', rutube: '5e834e799b2539ef9538920870bd1c78', vk: 'video-135836210_456246448', date: '2026-10-22' },
-  { youtube: 'fRda2QyITLE', title: 'Сборная России и RikaNV Strekoza BRF-4000 на Кубке IRLSF в горах Киргизии', author: 'RikaNV', line: 'strekoza', product: 'strekoza-brf-4000', vk: 'video-135836210_456246502', date: '2026-10-28' },
+  { youtube: 'fRda2QyITLE', title: 'Сборная России и RikaNV Strekoza BRF-4000 на Кубке IRLSF в горах Киргизии', author: 'RikaNV', line: 'strekoza', product: 'strekoza-brf-4000', vk: 'video-135836210_456246502', date: '2026-10-28', rutube: '3078b44e1cb7050f67693d1d78152cb3' },
 ];
 
 export const clipSrc = (c: Clip) => `/media/video/${c.id}.mp4`;

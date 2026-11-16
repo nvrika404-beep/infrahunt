@@ -8,6 +8,7 @@ cp -r "$ROOT/astro.config.mjs" "$ROOT/package.json" "$ROOT/src" "$ROOT/public" "
 cp -r "$T/overrides/." "$SITE/"
 ln -sfn "$ROOT/node_modules" "$SITE/node_modules"
 (cd "$SITE" && npx astro build >/dev/null)
+python3 -I "$T/upload_new.py"
 python3 -I "$T/js.py"
 node "$T/css.mjs" "$T/work/site.raw.css" "$SITE/dist"
 { echo '@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Unbounded:wght@500;600&display=swap");'
