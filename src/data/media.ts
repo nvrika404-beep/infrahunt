@@ -68,6 +68,7 @@ export interface Review {
 
 // Официальные обзоры — как на test.rika-nv.ru/#reviews, плюс выпуски канала youtube.com/@RikaNV.
 export const reviews: Review[] = [
+  { youtube: 'H5MGRJyTUuM', title: 'Вся правда о мультиспектральном бинокле RikaNV Snegir 640: обзор с Иваном Клипацким', author: 'RikaNV', line: 'snegir', product: 'snegir-640', rutube: '6c317d0ad8b4d24d80d96c4a03f4f052', date: '2026-11-05' },
   { youtube: '9mudS-DqfW8', title: 'Полный гид по RikaNV Kaban 650 LRF: настройки, меню и секреты от Ивана Клипацкого', author: 'RikaNV', line: 'kaban', product: 'kaban-650-lrf', rutube: '00a8283d5bccb874564c43b8266b1e47', vk: 'video-135836210_456246247', date: '2026-09-24' },
   { youtube: 'EVAayCh4rS8', title: 'RikaNV Kaban 650 LRF: убийца флагманов или компромисс? Разбор от Ивана Клипацкого', author: 'RikaNV', line: 'kaban', product: 'kaban-650-lrf' },
   { youtube: 'h5lLimnzhUc', title: 'RikaNV Kaban 650 LRF: первые впечатления и пристрелка', author: 'Саня на охоте', line: 'kaban', product: 'kaban-650-lrf' },
