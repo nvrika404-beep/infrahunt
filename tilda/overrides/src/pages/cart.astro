@@ -1,0 +1,190 @@
+---
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { clientData } from '../lib/catalog';
+import { site } from '../data/site';
+
+const data = clientData().map(({ slug, name, url, img, price, priceText }) => ({ slug, name, url, img, price, priceText }));
+---
+<Base title="Корзина и оформление заказа" description="Оформление заказа в InfraHunt: оставьте контакты, консультант подтвердит наличие и выставит счёт." noindex>
+  <div class="wrap">
+    <Breadcrumbs items={[{ href: '/', label: 'Главная' }, { href: '/cart/', label: 'Корзина' }]} />
+    <h1 class="title">Корзина</h1>
+
+    <div class="empty" data-empty hidden>
+      <p>Корзина пуста. Загляните в каталог — там новинки Kaban и Moskit.</p>
+      <a class="btn btn-primary" href="/catalog/">Перейти в каталог</a>
+    </div>
+
+    <div class="layout" data-layout hidden>
+      <section aria-label="Товары в корзине">
+        <ul class="items" data-items></ul>
+      </section>
+
+      <aside class="checkout" data-glow>
+        <div class="total"><span>Итого</span><b data-total>0 ₽</b></div>
+        <p class="note" data-note hidden>Для части приборов цена по запросу — консультант назовёт её при подтверждении.</p>
+        <form id="ih-cart-form" name="ih-cart-form" class="form t-form js-form-proccess" role="form" action="" method="POST" data-vibeblock-form="true" data-formactiontype="2" data-inputbox=".cart-field" data-success-callback="ihCartOk" data-form novalidate>
+          <label class="cart-field"><span>Имя</span><input name="Имя" class="js-tilda-rule" data-tilda-req="1" autocomplete="name" maxlength="80" placeholder="Как к вам обращаться" /><div class="t-input-error"></div></label>
+          <label class="cart-field"><span>Телефон</span><input name="Телефон" type="tel" class="js-tilda-rule" data-tilda-req="1" data-tilda-rule="phone" inputmode="tel" autocomplete="tel" maxlength="24" placeholder="+7 900 000-00-00" /><div class="t-input-error"></div></label>
+          <label class="cart-field"><span>Город доставки</span><input name="Город" autocomplete="address-level2" maxlength="80" placeholder="Например, Краснодар" /><div class="t-input-error"></div></label>
+          <label class="cart-field"><span>Комментарий</span><textarea name="Комментарий" rows="3" maxlength="1000" placeholder="Удобное время звонка, способ доставки, вопросы"></textarea><div class="t-input-error"></div></label>
+          <input type="hidden" name="Тип заявки" value="🛒 Заказ из корзины" />
+          <input type="hidden" name="Заказ" data-cart-f="order" />
+          <input type="hidden" name="Итого" data-cart-f="total" />
+          <input type="hidden" name="Номер заявки" data-cart-f="id" />
+          <input type="hidden" name="Откуда пришёл" data-cart-f="source" />
+          <label class="consent cart-field"><input type="checkbox" name="Согласие на обработку данных" value="Да" class="js-tilda-rule" data-tilda-req="1" /> <span>Согласен на обработку персональных данных по <a href="/politika-konfidencialnosti/" target="_blank">политике конфиденциальности</a></span><div class="t-input-error"></div></label>
+          <div class="js-errorbox-all" style="display: none"><div class="js-rule-error-all"></div></div>
+          <button class="btn btn-primary submit t-submit" type="submit" data-submit>Отправить заказ</button>
+          <p class="hint">Оплата — по счёту после того, как консультант подтвердит наличие и стоимость доставки.</p>
+        </form>
+        <div class="done" data-done hidden tabindex="-1">
+          <b>Заказ отправлен</b>
+          <p>Консультант свяжется с вами в ближайшее рабочее время. Номер заявки: <span data-order-id></span></p>
+        </div>
+        <div class="fallback" data-fallback hidden>
+          <p>Не удалось отправить заявку с сайта. Отправьте её одним нажатием в мессенджер — текст уже готов:</p>
+          <a class="btn btn-primary" data-wa target="_blank" rel="noopener">Отправить в WhatsApp</a>
+          <a class="btn btn-ghost" href={site.phones[0].href}>Позвонить {site.phones[0].display}</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <script type="application/json" id="cart-data" set:html={JSON.stringify(data)} />
+  <script type="application/json" id="cart-wa" set:html={JSON.stringify(site.whatsapp)} />
+</Base>
+
+<script>
+  import { store } from '../scripts/store';
+  import { formatPhone } from '../scripts/lead';
+
+  type Item = { slug: string; name: string; url: string; img: string; price: number | null; priceText: string };
+  const all: Item[] = JSON.parse(document.getElementById('cart-data')!.textContent!);
+  const whatsapp: string = JSON.parse(document.getElementById('cart-wa')!.textContent!);
+  const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
+  const list = $('[data-items]');
+  const money = (n: number) => `${n.toLocaleString('ru-RU')} ₽`;
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+  const lines = () => store.cart().map((c) => ({ ...c, item: all.find((p) => p.slug === c.slug) })).filter((l) => l.item) as { slug: string; qty: number; item: Item }[];
+
+  function render() {
+    const rows = lines();
+    $('[data-empty]').hidden = rows.length > 0 || !$('[data-done]').hidden;
+    $('[data-layout]').hidden = rows.length === 0 && $('[data-done]').hidden;
+    list.innerHTML = rows.map(({ item, qty }) => `
+      <li class="row">
+        <a class="thumb" href="${item.url}"><img src="${item.img}" alt="" width="120" height="90" loading="lazy"></a>
+        <div class="meta"><a href="${item.url}">${esc(item.name)}</a><span>${esc(item.priceText)}</span></div>
+        <div class="qty" role="group" aria-label="Количество">
+          <button type="button" data-dec="${item.slug}" aria-label="Меньше">−</button><output>${qty}</output><button type="button" data-inc="${item.slug}" aria-label="Больше">+</button>
+        </div>
+        <b class="sum">${item.price ? money(item.price * qty) : 'по запросу'}</b>
+        <button type="button" class="del" data-del="${item.slug}" aria-label="Удалить ${esc(item.name)}">×</button>
+      </li>`).join('');
+    const total = rows.reduce((s, r) => s + (r.item.price ?? 0) * r.qty, 0);
+    $('[data-total]').textContent = money(total);
+    $('[data-note]').hidden = !rows.some((r) => !r.item.price);
+  }
+
+  list.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const items = store.cart();
+    const change = (slug: string, delta: number) => store.setCart(items.map((i) => (i.slug === slug ? { ...i, qty: Math.max(0, Math.min(99, i.qty + delta)) } : i)).filter((i) => i.qty > 0));
+    if (t.dataset.inc) change(t.dataset.inc, 1);
+    if (t.dataset.dec) change(t.dataset.dec, -1);
+    if (t.dataset.del) store.setCart(items.filter((i) => i.slug !== t.dataset.del));
+  });
+
+  const form = $<HTMLFormElement>('[data-form]');
+  const orderText = (f: FormData) => {
+    const rows = lines().map((r) => `• ${r.item.name} × ${r.qty} — ${r.item.price ? money(r.item.price * r.qty) : 'цена по запросу'}`);
+    return [`Заказ с сайта infrahunt.ru`, ...rows, `Имя: ${f.get('Имя')}`, `Телефон: ${f.get('Телефон')}`, f.get('Город') ? `Город: ${f.get('Город')}` : '', f.get('Комментарий') ? `Комментарий: ${f.get('Комментарий')}` : '']
+      .filter(Boolean).join('\n');
+  };
+
+  const phoneInput = form.querySelector<HTMLInputElement>('input[name="Телефон"]')!;
+  phoneInput.addEventListener('blur', () => (phoneInput.value = formatPhone(phoneInput.value)));
+  const field = (name: string) => form.querySelector<HTMLInputElement>(`[data-cart-f="${name}"]`)!;
+
+  // Заказ уходит через формы Тильды: состав и сумма — скрытыми полями.
+  (window as unknown as { ihCartOk: () => void }).ihCartOk = () => {
+    $('[data-order-id]').textContent = field('id').value;
+    form.hidden = true;
+    $('[data-fallback]').hidden = true;
+    $('[data-done]').hidden = false;
+    $('[data-done]').focus();
+    store.setCart([]);
+  };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    phoneInput.value = formatPhone(phoneInput.value);
+    const rows = lines();
+    const total = rows.reduce((sum, r) => sum + (r.item.price ?? 0) * r.qty, 0);
+    field('order').value = rows.map((r) => `${r.item.name} × ${r.qty} — ${r.item.price ? money(r.item.price * r.qty) : 'цена по запросу'}`).join('; ');
+    field('total').value = money(total) + (rows.some((r) => !r.item.price) ? ' + позиции по запросу' : '');
+    field('id').value = `IH-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+    try { field('source').value = localStorage.getItem('ih-source') ?? ''; } catch { field('source').value = ''; }
+    const submit = $<HTMLButtonElement>('[data-submit]');
+    const send = (window as unknown as { t_forms__initBtnClick?: (e: object) => void }).t_forms__initBtnClick;
+    if (send) { send({ target: submit, srcElement: submit, preventDefault() {} }); return; }
+    // Библиотека форм не загрузилась — предлагаем отправить заказ в WhatsApp.
+    $<HTMLAnchorElement>('[data-wa]').href = `${whatsapp}?text=${encodeURIComponent(orderText(new FormData(form)))}`;
+    $('[data-fallback]').hidden = false;
+  });
+
+  window.addEventListener('ih:store', render);
+  window.addEventListener('storage', render);
+  render();
+</script>
+
+<style>
+  .title { padding: 18px 0 28px; }
+  .empty { display: grid; justify-items: start; gap: 16px; padding: 32px; border: 1px dashed var(--line-strong); border-radius: var(--radius); color: var(--muted); }
+  .empty[hidden], .layout[hidden] { display: none; }
+  .layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
+  .items { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .items :global(.row) { display: grid; grid-template-columns: 96px 1fr auto auto 32px; gap: 16px; align-items: center; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .items :global(.thumb img) { width: 96px; height: 72px; object-fit: contain; }
+  .items :global(.meta) { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .items :global(.meta a) { font-weight: 700; }
+  .items :global(.meta a:hover) { color: var(--gold); }
+  .items :global(.meta span) { color: var(--muted); font-size: 14px; }
+  .items :global(.qty) { display: flex; align-items: center; border: 1px solid var(--line-strong); border-radius: 999px; }
+  .items :global(.qty button) { width: 34px; height: 34px; border: 0; background: none; font-size: 18px; border-radius: 50%; }
+  .items :global(.qty button:hover) { background: var(--surface-2); }
+  .items :global(.qty output) { min-width: 24px; text-align: center; font-weight: 700; }
+  .items :global(.sum) { font-family: var(--display); font-weight: 600; white-space: nowrap; }
+  .items :global(.del) { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line-strong); background: none; font-size: 18px; line-height: 1; }
+  .items :global(.del:hover) { background: var(--accent); border-color: var(--accent); }
+
+  .checkout { --mx: 80%; --my: 0%; position: sticky; top: 130px; display: grid; gap: 16px; padding: 24px; border-radius: var(--radius); border: 1px solid rgba(255, 122, 26, 0.28);
+    background: radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 90, 31, 0.14), transparent 65%), var(--surface); }
+  .total { display: flex; justify-content: space-between; align-items: baseline; }
+  .total b { font-family: var(--display); font-size: 30px; font-weight: 600; }
+  .note, .hint { font-size: 13.5px; color: var(--muted); }
+  .form { display: grid; gap: 14px; }
+  .form[hidden], .done[hidden], .fallback[hidden] { display: none; }
+  .form label { display: grid; gap: 6px; font-size: 14px; font-weight: 600; }
+  .form input:not([type='checkbox']), .form textarea { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--bg); font-size: 16px; transition: border-color 0.2s, box-shadow 0.2s; }
+  .form input:focus, .form textarea:focus { outline: none; border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.18); }
+  .form .consent { display: flex; gap: 10px; align-items: flex-start; font-weight: 500; font-size: 13.5px; color: var(--muted); }
+  .consent input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+  .consent a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+  .hp { position: absolute; left: -9999px; }
+  .form :global(.t-input-error) { color: #ff8a80; font-size: 13px; font-weight: 500; }
+  .form :global(.t-input-error:empty) { display: none; }
+  .submit { width: 100%; }
+  .done { display: grid; gap: 8px; padding: 18px; border-radius: 12px; background: rgba(61, 220, 132, 0.08); border: 1px solid rgba(61, 220, 132, 0.35); }
+  .done b { font-family: var(--display); font-weight: 600; font-size: 20px; }
+  .fallback { display: grid; gap: 10px; font-size: 14px; color: var(--muted); }
+  @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } .checkout { position: static; } }
+  @media (max-width: 560px) {
+    .items :global(.row) { grid-template-columns: 72px 1fr 32px; grid-template-areas: 'img meta del' 'img qty sum'; gap: 10px 12px; }
+    .items :global(.thumb) { grid-area: img; } .items :global(.meta) { grid-area: meta; } .items :global(.del) { grid-area: del; }
+    .items :global(.qty) { grid-area: qty; width: fit-content; } .items :global(.sum) { grid-area: sum; text-align: right; }
+    .items :global(.thumb img) { width: 72px; height: 60px; }
+  }
+</style>

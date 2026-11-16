@@ -1,0 +1,160 @@
+---
+// Окно быстрой заявки: «Купить в 1 клик», «Запросить цену» и «Заказать звонок».
+// Открывается кнопкой с data-lead="quick|price|callback" (и data-slug для товара).
+import Icon from './Icon.astro';
+import { products } from '../lib/catalog';
+import { site } from '../data/site';
+
+const mini = Object.fromEntries(products.map((p) => [p.slug, { name: p.name, price: p.priceText, img: p.images[0]?.thumb }]));
+---
+<dialog class="lead" id="lead-dialog" aria-labelledby="lead-title">
+  <form id="ih-lead-form" name="ih-lead-form" class="lead-form t-form js-form-proccess" role="form" action="" method="POST"
+    data-vibeblock-form="true" data-formactiontype="2" data-inputbox=".lead-field" data-success-callback="ihLeadOk" data-lead-form novalidate>
+    <button class="lead-close" type="button" data-lead-close aria-label="Закрыть">×</button>
+    <p class="eyebrow" data-lead-eyebrow>Заявка</p>
+    <h2 id="lead-title" data-lead-title>Заказать звонок</h2>
+    <p class="lead-sub muted" data-lead-sub></p>
+    <div class="lead-product" data-lead-product hidden>
+      <img alt="" width="96" height="72" data-lead-img src={mini[Object.keys(mini)[0]].img} />
+      <span><b data-lead-name></b><small data-lead-price></small></span>
+    </div>
+    <label class="lead-field"><span>Имя</span><input name="Имя" class="js-tilda-rule" data-tilda-req="1" autocomplete="name" maxlength="80" placeholder="Как к вам обращаться" /><div class="t-input-error"></div></label>
+    <label class="lead-field"><span>Телефон</span><input name="Телефон" type="tel" class="js-tilda-rule" data-tilda-req="1" data-tilda-rule="phone" inputmode="tel" autocomplete="tel" maxlength="24" placeholder="+7 900 000-00-00" /><div class="t-input-error"></div></label>
+    <label class="lead-field"><span data-lead-comment-label>Комментарий</span><textarea name="Комментарий" rows="2" maxlength="1000" data-lead-comment></textarea><div class="t-input-error"></div></label>
+    <input type="hidden" name="Тип заявки" data-lead-f="type" />
+    <input type="hidden" name="Товар" data-lead-f="product" />
+    <input type="hidden" name="Номер заявки" data-lead-f="id" />
+    <input type="hidden" name="Страница" data-lead-f="page" />
+    <input type="hidden" name="Откуда пришёл" data-lead-f="source" />
+    <label class="consent lead-field"><input type="checkbox" name="Согласие на обработку данных" value="Да" class="js-tilda-rule" data-tilda-req="1" /> <span>Согласен на обработку персональных данных по <a href="/politika-konfidencialnosti/" target="_blank">политике конфиденциальности</a></span><div class="t-input-error"></div></label>
+    <div class="js-errorbox-all" style="display: none"><div class="js-rule-error-all"></div></div>
+    <button class="btn btn-primary submit t-submit" type="submit" data-lead-submit>Отправить</button>
+    <p class="hint">Ответим в рабочее время. Оплата — только по счёту после подтверждения.</p>
+  </form>
+  <div class="lead-done" data-lead-done hidden tabindex="-1">
+    <span class="done-icon"><Icon name="check" size={30} /></span>
+    <h2>Заявка отправлена</h2>
+    <p class="muted">Номер заявки: <b data-lead-id></b>. Консультант свяжется с вами в рабочее время.</p>
+    <button class="btn btn-ghost" type="button" data-lead-close>Закрыть</button>
+  </div>
+  <div class="lead-fallback" data-lead-fallback hidden>
+    <h2>Не получилось отправить с сайта</h2>
+    <p class="muted">Отправьте заявку одним нажатием в WhatsApp — текст уже готов. Или позвоните.</p>
+    <a class="btn btn-primary" data-lead-wa target="_blank" rel="noopener"><Icon name="whatsapp" size={18} />Отправить в WhatsApp</a>
+    <a class="btn btn-ghost" href={site.phones[0].href}><Icon name="phone" size={18} />{site.phones[0].display}</a>
+  </div>
+</dialog>
+<script type="application/json" id="lead-data" set:html={JSON.stringify({ products: mini, whatsapp: site.whatsapp })} />
+
+<script>
+  import { formatPhone, rememberSource, type LeadType } from '../scripts/lead';
+
+  // Заявка уходит через формы Тильды в подключённые получатели (Telegram).
+  rememberSource();
+  const dialog = document.getElementById('lead-dialog') as HTMLDialogElement;
+  const data = JSON.parse(document.getElementById('lead-data')!.textContent!) as {
+    products: Record<string, { name: string; price: string; img: string }>; whatsapp: string;
+  };
+  const $ = <T extends HTMLElement>(sel: string) => dialog.querySelector<T>(sel)!;
+  const form = $<HTMLFormElement>('[data-lead-form]');
+  const field = (name: string) => $<HTMLInputElement>(`[data-lead-f="${name}"]`);
+  const TEXT: Record<Exclude<LeadType, 'cart'>, { label: string; eyebrow: string; title: string; sub: string; comment: string; placeholder: string; submit: string }> = {
+    quick: { label: '⚡ Покупка в 1 клик', eyebrow: 'Без корзины', title: 'Купить в 1 клик', sub: 'Оставьте имя и телефон — консультант перезвонит, подтвердит наличие и выставит счёт.', comment: 'Город доставки или вопрос', placeholder: 'Например: Краснодар, нужен кронштейн на Тигр', submit: 'Отправить заявку' },
+    price: { label: '💬 Запрос цены', eyebrow: 'Цена по запросу', title: 'Узнать цену', sub: 'Сообщим актуальную цену, наличие и сроки поставки.', comment: 'Комментарий', placeholder: 'Город, вопросы по модели', submit: 'Узнать цену' },
+    callback: { label: '📞 Заказ звонка', eyebrow: 'Консультация', title: 'Заказать звонок', sub: 'Перезвоним, поможем выбрать прибор и кронштейн под ваш карабин.', comment: 'Удобное время или вопрос', placeholder: 'Например: после 18:00, выбираю между Kaban и Moskit', submit: 'Жду звонка' },
+  };
+  let type: Exclude<LeadType, 'cart'> = 'callback';
+  let slug = '';
+
+  function open(t: typeof type, s = '') {
+    type = t; slug = s;
+    const text = TEXT[t];
+    $('[data-lead-eyebrow]').textContent = text.eyebrow;
+    $('[data-lead-title]').textContent = text.title;
+    $('[data-lead-sub]').textContent = text.sub;
+    $('[data-lead-comment-label]').textContent = text.comment;
+    $<HTMLTextAreaElement>('[data-lead-comment]').placeholder = text.placeholder;
+    $('[data-lead-submit]').textContent = text.submit;
+    const product = data.products[s];
+    $('[data-lead-product]').hidden = !product;
+    if (product) {
+      $<HTMLImageElement>('[data-lead-img]').src = product.img;
+      $('[data-lead-name]').textContent = product.name;
+      $('[data-lead-price]').textContent = product.price;
+    }
+    field('type').value = text.label;
+    field('product').value = product ? `${product.name} — ${product.price}` : '';
+    field('page').value = location.href.split('#')[0];
+    try { field('source').value = localStorage.getItem('ih-source') ?? ''; } catch { field('source').value = ''; }
+    form.hidden = false;
+    $('[data-lead-done]').hidden = true;
+    $('[data-lead-fallback]').hidden = true;
+    dialog.showModal();
+    form.querySelector<HTMLInputElement>('input[name="Имя"]')!.focus();
+  }
+
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-lead]');
+    if (!trigger) return;
+    e.preventDefault();
+    open(trigger.dataset.lead as typeof type, trigger.dataset.slug ?? '');
+  });
+  dialog.querySelectorAll('[data-lead-close]').forEach((b) => b.addEventListener('click', () => dialog.close()));
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+  const phoneInput = form.querySelector<HTMLInputElement>('input[name="Телефон"]')!;
+  phoneInput.addEventListener('blur', () => (phoneInput.value = formatPhone(phoneInput.value)));
+
+  (window as unknown as { ihLeadOk: () => void }).ihLeadOk = () => {
+    $('[data-lead-id]').textContent = field('id').value;
+    form.hidden = true;
+    $('[data-lead-done]').hidden = false;
+    $('[data-lead-done]').focus();
+    form.reset();
+  };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    phoneInput.value = formatPhone(phoneInput.value);
+    field('id').value = `IH-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+    const submit = $<HTMLButtonElement>('[data-lead-submit]');
+    const send = (window as unknown as { t_forms__initBtnClick?: (e: object) => void }).t_forms__initBtnClick;
+    if (send) { send({ target: submit, srcElement: submit, preventDefault() {} }); return; }
+    // Библиотека форм не загрузилась — предлагаем отправить ту же заявку в WhatsApp.
+    const f = new FormData(form);
+    const text = [TEXT[type].title + ' — infrahunt.ru', String(f.get('Товар') || ''), `Имя: ${f.get('Имя')}`, `Телефон: ${f.get('Телефон')}`, String(f.get('Комментарий') || '')].filter(Boolean).join('\n');
+    $<HTMLAnchorElement>('[data-lead-wa]').href = `${data.whatsapp}?text=${encodeURIComponent(text)}`;
+    form.hidden = true;
+    $('[data-lead-fallback]').hidden = false;
+  });
+</script>
+
+<style>
+  .lead { width: min(480px, 100vw - 24px); max-height: calc(100dvh - 24px); padding: 0; border: 1px solid var(--line-strong); border-radius: calc(var(--radius) + 4px); background: var(--surface); color: var(--text); box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6); }
+  .lead::backdrop { background: rgba(5, 6, 8, 0.75); backdrop-filter: blur(6px); }
+  .lead[open] { animation: lead-in 0.35s var(--ease); }
+  @keyframes lead-in { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+  .lead-form, .lead-done, .lead-fallback { position: relative; display: grid; gap: 14px; padding: 28px; }
+  .lead-form[hidden], .lead-done[hidden], .lead-fallback[hidden], .lead-product[hidden] { display: none; }
+  .lead h2 { font-size: 26px; }
+  .lead-sub { font-size: 14.5px; margin-top: -4px; }
+  .lead-close { position: absolute; right: 14px; top: 14px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line-strong); background: transparent; font-size: 22px; line-height: 1; }
+  .lead-close:hover { background: var(--accent); border-color: var(--accent); }
+  .lead-product { display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--bg); border: 1px solid var(--line); }
+  .lead-product img { width: 72px; height: 54px; object-fit: contain; }
+  .lead-product span { display: flex; flex-direction: column; }
+  .lead-product small { color: var(--muted); font-weight: 600; }
+  .lead label { display: grid; gap: 6px; font-size: 14px; font-weight: 600; }
+  .lead input:not([type='checkbox']), .lead textarea { width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--bg); font-size: 16px; transition: border-color 0.2s, box-shadow 0.2s; }
+  .lead input:focus, .lead textarea:focus { outline: none; border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.18); }
+  .lead .consent { display: flex; gap: 10px; align-items: flex-start; font-weight: 500; font-size: 13px; color: var(--muted); }
+  .consent input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+  .consent a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+  .hp { position: absolute; left: -9999px; }
+    .lead :global(.t-input-error) { color: #ff8a80; font-size: 13px; font-weight: 500; }
+  .lead :global(.t-input-error:empty) { display: none; }
+  .submit { width: 100%; }
+  .hint { font-size: 12.5px; color: var(--faint); text-align: center; }
+  .lead-done { justify-items: center; text-align: center; padding: 40px 28px; }
+  .done-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(61, 220, 132, 0.15); color: var(--ok); animation: soc-pop 0.6s var(--ease); }
+  .lead-fallback .btn { width: 100%; }
+</style>

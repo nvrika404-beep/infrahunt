@@ -1,0 +1,190 @@
+[
+{
+"url_from": "/page/contacts",
+"url_to": "/kontakty"
+},
+{
+"url_from": "/page/about-us",
+"url_to": "/kontakty"
+},
+{
+"url_from": "/page/dostavka-i-oplata",
+"url_to": "/dostavka-i-oplata"
+},
+{
+"url_from": "/page/exchange",
+"url_to": "/obmen-i-vozvrat"
+},
+{
+"url_from": "/page/agreement",
+"url_to": "/politika-konfidencialnosti"
+},
+{
+"url_from": "/page/oferta",
+"url_to": "/dostavka-i-oplata"
+},
+{
+"url_from": "/product/teplovizor-rikanv-kaban-650-lrf",
+"url_to": "/product/rikanv-kaban-650-lrf"
+},
+{
+"url_from": "/product/teplovizor-rikanv-moskit",
+"url_to": "/product/rikanv-moskit-650-lrf"
+},
+{
+"url_from": "/product/rikanv-snegir-1280l",
+"url_to": "/product/rikanv-snegir-1280"
+},
+{
+"url_from": "/product/teplovizor-rikanv-hypnose-670d",
+"url_to": "/catalog/teplovizory-nablyudeniya"
+},
+{
+"url_from": "/product/teplovizor-rikanv-hypnose2-660d",
+"url_to": "/catalog/teplovizory-nablyudeniya"
+},
+{
+"url_from": "/product/teplovizor-rikanv-surok-m25-alfa",
+"url_to": "/catalog/teplovizory-nablyudeniya"
+},
+{
+"url_from": "/product/teplovizor-rikanv-surok-m25",
+"url_to": "/catalog/teplovizory-nablyudeniya"
+},
+{
+"url_from": "/product/rikanv-surok-m35-lrf-2",
+"url_to": "/catalog/teplovizory-nablyudeniya"
+},
+{
+"url_from": "/product/teplovizionnaya-nasadka-longot-mate-y050-mah50",
+"url_to": "/catalog"
+},
+{
+"url_from": "/product/teplovizionnyy-pritsel-rikanv-lesnik2-660l",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/product/teplovizionnyy-pritsel-rikanv-lesnik2-650l",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/product/teplovizionnyy-pritsel-rikanv-lesnik2-335l",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/product/teplovizionnyy-pritsel-lesnik2-360l-pro",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/product/rikanv-ovod-m35-lrf",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/product/rikanv-ovod-m35",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/product/teplovizionnyy-pritsel-rikanv-ovod-h50-lrf",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/product/fonar-nalobnyy-rikanv-l20-18650-led",
+"url_to": "/catalog"
+},
+{
+"url_from": "/product/fonar-ruchnoy-rikanv-l1-21700-z-led",
+"url_to": "/catalog"
+},
+{
+"url_from": "/collection/rikanv-dovod-pro",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/collection/rikanv-dovod",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/collection/rikanv-lesnik2-pro",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/collection/rikanv-lesnik2",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/collection/rikanv-lesnik",
+"url_to": "/catalog/teplovizionnye-pricely"
+},
+{
+"url_from": "/collection/rikanv-strekoza",
+"url_to": "/catalog/dalnomery"
+},
+{
+"url_from": "/collection/rikanv-sinica",
+"url_to": "/catalog/teplovizory-nablyudeniya"
+},
+{
+"url_from": "/collection/rikanv-surok-m",
+"url_to": "/catalog/teplovizory-nablyudeniya"
+},
+{
+"url_from": "/collection/rikanv-hypnose2",
+"url_to": "/catalog/teplovizory-nablyudeniya"
+},
+{
+"url_from": "/collection/rikanv-snegir",
+"url_to": "/catalog/binokli"
+},
+{
+"url_from": "/collection/rikanv-ehidna",
+"url_to": "/catalog"
+},
+{
+"url_from": "/blogs/blog",
+"url_to": "/"
+},
+{
+"url_from": "/blogs/blog/second",
+"url_to": "/"
+},
+{
+"url_from": "/blogs/blog/first",
+"url_to": "/"
+},
+{
+"url_from": "/blogs/blog/tags/teg-2",
+"url_to": "/"
+},
+{
+"url_from": "/blogs/blog/tags/teg-3",
+"url_to": "/"
+},
+{
+"url_from": "/blogs/blog/tags/teg-1",
+"url_to": "/"
+},
+{
+"url_from": "/collection/all",
+"url_to": "/catalog"
+},
+{
+"url_from": "/collection/aktsiya",
+"url_to": "/catalog"
+},
+{
+"url_from": "/collection/frontpage",
+"url_to": "/catalog"
+},
+{
+"url_from": "/collection/hity-prodazh",
+"url_to": "/catalog"
+},
+{
+"url_from": "/collection/fonari-rikanv",
+"url_to": "/catalog"
+},
+{
+"url_from": "/product/rikanv-ehidna-g-ec-1",
+"url_to": "/catalog"
+}
+]
