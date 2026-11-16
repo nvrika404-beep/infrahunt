@@ -21,6 +21,8 @@ const mini = Object.fromEntries(products.map((p) => [p.slug, { name: p.name, pri
     <label class="lead-field"><span>Имя</span><input name="Имя" class="js-tilda-rule" data-tilda-req="1" autocomplete="name" maxlength="80" placeholder="Как к вам обращаться" /><div class="t-input-error"></div></label>
     <label class="lead-field"><span>Телефон</span><input name="Телефон" type="tel" class="js-tilda-rule" data-tilda-req="1" data-tilda-rule="phone" inputmode="tel" autocomplete="tel" maxlength="24" placeholder="+7 900 000-00-00" /><div class="t-input-error"></div></label>
     <label class="lead-field"><span data-lead-comment-label>Комментарий</span><textarea name="Комментарий" rows="2" maxlength="1000" data-lead-comment></textarea><div class="t-input-error"></div></label>
+    <!-- Получатель Telegram из настроек форм Тильды -->
+    <input type="hidden" name="formservices[]" value="1b10f262f5d5faf281accc29c30bbd99" class="js-formaction-services" />
     <input type="hidden" name="Тип заявки" data-lead-f="type" />
     <input type="hidden" name="Товар" data-lead-f="product" />
     <input type="hidden" name="Номер заявки" data-lead-f="id" />
@@ -65,6 +67,7 @@ const mini = Object.fromEntries(products.map((p) => [p.slug, { name: p.name, pri
   };
   let type: Exclude<LeadType, 'cart'> = 'callback';
   let slug = '';
+  let leadId = ''; // Тильда очищает поля после отправки, номер держим отдельно
 
   function open(t: typeof type, s = '') {
     type = t; slug = s;
@@ -86,6 +89,9 @@ const mini = Object.fromEntries(products.map((p) => [p.slug, { name: p.name, pri
     field('product').value = product ? `${product.name} — ${product.price}` : '';
     field('page').value = location.href.split('#')[0];
     try { field('source').value = localStorage.getItem('ih-source') ?? ''; } catch { field('source').value = ''; }
+    // Тильда отправляет форму сама по клику на кнопку — номер заявки ставим заранее, при открытии окна.
+    leadId = `IH-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+    field('id').value = leadId;
     form.hidden = false;
     $('[data-lead-done]').hidden = true;
     $('[data-lead-fallback]').hidden = true;
@@ -105,7 +111,7 @@ const mini = Object.fromEntries(products.map((p) => [p.slug, { name: p.name, pri
   phoneInput.addEventListener('blur', () => (phoneInput.value = formatPhone(phoneInput.value)));
 
   (window as unknown as { ihLeadOk: () => void }).ihLeadOk = () => {
-    $('[data-lead-id]').textContent = field('id').value;
+    $('[data-lead-id]').textContent = leadId;
     form.hidden = true;
     $('[data-lead-done]').hidden = false;
     $('[data-lead-done]').focus();
@@ -115,7 +121,6 @@ const mini = Object.fromEntries(products.map((p) => [p.slug, { name: p.name, pri
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     phoneInput.value = formatPhone(phoneInput.value);
-    field('id').value = `IH-${Date.now().toString(36).toUpperCase().slice(-6)}`;
     const submit = $<HTMLButtonElement>('[data-lead-submit]');
     const send = (window as unknown as { t_forms__initBtnClick?: (e: object) => void }).t_forms__initBtnClick;
     if (send) { send({ target: submit, srcElement: submit, preventDefault() {} }); return; }
