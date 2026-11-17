@@ -31,6 +31,7 @@ const data = clientData().map(({ slug, name, url, img, price, priceText }) => ({
           <label class="cart-field"><span>Комментарий</span><textarea name="Комментарий" rows="3" maxlength="1000" placeholder="Удобное время звонка, способ доставки, вопросы"></textarea><div class="t-input-error"></div></label>
           <!-- Получатель Telegram из настроек форм Тильды -->
           <input type="hidden" name="formservices[]" value="1b10f262f5d5faf281accc29c30bbd99" class="js-formaction-services" />
+          <input type="hidden" name="formservices[]" value="b358caf50b53d9dd896aea2d640e9214" class="js-formaction-services" />
           <input type="hidden" name="Тип заявки" value="🛒 Заказ из корзины" />
           <input type="hidden" name="Заказ" data-cart-f="order" />
           <input type="hidden" name="Итого" data-cart-f="total" />
