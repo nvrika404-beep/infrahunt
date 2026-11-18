@@ -4,11 +4,9 @@ import { site } from '../data/site';
 
 interface Props { size?: 'sm' | 'md'; labels?: boolean; text?: string }
 const { size = 'md', labels = true, text } = Astro.props;
-const wa = text ? `${site.whatsapp}?text=${encodeURIComponent(text)}` : site.whatsapp;
 const items = [
-  { key: 'whatsapp', label: 'WhatsApp', href: wa },
-  { key: 'telegram', label: 'Telegram', href: site.telegram },
   { key: 'max', label: 'MAX', href: site.max },
+  { key: 'telegram', label: 'Telegram', href: site.telegram },
   { key: 'vk', label: 'ВКонтакте', href: site.vk },
   { key: 'youtube', label: 'YouTube', href: site.youtube },
   { key: 'rutube', label: 'RuTube', href: site.rutube },

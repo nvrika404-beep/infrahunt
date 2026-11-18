@@ -36,7 +36,6 @@ p.groups.forEach((g, i) => {
   specColumns[c].push({ g, i });
   columnRows[c] += g.rows.length + 2;
 });
-const whatsappText = encodeURIComponent(`Здравствуйте! Хочу заказать ${p.name}${p.price ? ` (${p.priceText})` : ''}.`);
 const fullName = `${p.category.kind} ${p.name}`;
 const seoTitle = `${fullName} — купить, цена ${p.price ? p.priceText : 'по запросу'}`;
 const seoDescription = `${fullName}. ${p.copy.lead} ${p.price ? `Цена ${p.priceText}.` : 'Цена по запросу.'} ${p.availabilityText}, доставка по России, гарантия производителя.`;
@@ -123,7 +122,7 @@ const productLd = {
           </button>
         </div>
         {p.price && <button class="btn one-click" type="button" data-lead="quick" data-slug={p.slug}><span class="bolt" aria-hidden="true">⚡</span>Купить в 1 клик<small>без корзины, перезвоним за 15 минут</small></button>}
-        <a class="quick" href={`${site.whatsapp}?text=${whatsappText}`} target="_blank" rel="noopener"><Icon name="whatsapp" size={16} />Или напишите в WhatsApp</a>
+        <a class="quick" href={site.max} target="_blank" rel="noopener"><Icon name="max" size={16} />Или напишите в MAX</a>
         <ul class="perks">
           <li>Гарантия производителя RikaNV</li>
           <li>Доставка СДЭК и Почтой России</li>

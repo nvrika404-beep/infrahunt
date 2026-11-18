@@ -47,15 +47,15 @@ const data = clientData().map(({ slug, name, url, img, price, priceText }) => ({
           <p>Консультант свяжется с вами в ближайшее рабочее время. Номер заявки: <span data-order-id></span></p>
         </div>
         <div class="fallback" data-fallback hidden>
-          <p>Не удалось отправить заявку с сайта. Отправьте её одним нажатием в мессенджер — текст уже готов:</p>
-          <a class="btn btn-primary" data-wa target="_blank" rel="noopener">Отправить в WhatsApp</a>
+          <p>Не удалось отправить заявку с сайта. Нажмите кнопку — текст заказа скопируется, откроется наш чат в MAX: вставьте его и отправьте.</p>
+          <a class="btn btn-primary" data-wa target="_blank" rel="noopener">Скопировать заказ и открыть MAX</a>
           <a class="btn btn-ghost" href={site.phones[0].href}>Позвонить {site.phones[0].display}</a>
         </div>
       </aside>
     </div>
   </div>
   <script type="application/json" id="cart-data" set:html={JSON.stringify(data)} />
-  <script type="application/json" id="cart-wa" set:html={JSON.stringify(site.whatsapp)} />
+  <script type="application/json" id="cart-wa" set:html={JSON.stringify(site.max)} />
 </Base>
 
 <script>
@@ -64,7 +64,7 @@ const data = clientData().map(({ slug, name, url, img, price, priceText }) => ({
 
   type Item = { slug: string; name: string; url: string; img: string; price: number | null; priceText: string };
   const all: Item[] = JSON.parse(document.getElementById('cart-data')!.textContent!);
-  const whatsapp: string = JSON.parse(document.getElementById('cart-wa')!.textContent!);
+  const maxChat: string = JSON.parse(document.getElementById('cart-wa')!.textContent!);
   const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
   const list = $('[data-items]');
   const money = (n: number) => `${n.toLocaleString('ru-RU')} ₽`;
@@ -141,8 +141,11 @@ const data = clientData().map(({ slug, name, url, img, price, priceText }) => ({
     const submit = $<HTMLButtonElement>('[data-submit]');
     const send = (window as unknown as { t_forms__initBtnClick?: (e: object) => void }).t_forms__initBtnClick;
     if (send) { send({ target: submit, srcElement: submit, preventDefault() {} }); return; }
-    // Библиотека форм не загрузилась — предлагаем отправить заказ в WhatsApp.
-    $<HTMLAnchorElement>('[data-wa]').href = `${whatsapp}?text=${encodeURIComponent(orderText(new FormData(form)))}`;
+    // Библиотека форм не загрузилась — предлагаем отправить заказ в MAX.
+    const order = orderText(new FormData(form));
+    const link = $<HTMLAnchorElement>('[data-wa]');
+    link.href = maxChat;
+    link.onclick = () => { navigator.clipboard?.writeText(order).catch(() => {}); };
     $('[data-fallback]').hidden = false;
   });
 

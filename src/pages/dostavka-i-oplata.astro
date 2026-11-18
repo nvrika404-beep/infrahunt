@@ -8,7 +8,7 @@ import { faq } from '../data/faq';
 import { site } from '../data/site';
 
 const steps: { icon: IconName; title: string; text: string }[] = [
-  { icon: 'cart', title: 'Заявка', text: 'Оформите корзину на сайте, позвоните или напишите в WhatsApp и Telegram.' },
+  { icon: 'cart', title: 'Заявка', text: 'Оформите корзину на сайте, позвоните или напишите в MAX и Telegram.' },
   { icon: 'chat', title: 'Подтверждение', text: 'Консультант проверит наличие, поможет с кронштейном и назовёт стоимость доставки.' },
   { icon: 'doc', title: 'Счёт и оплата', text: 'Выставляем счёт после согласования стоимости и наличия. Оплачиваете — и прибор ваш.' },
   { icon: 'truck', title: 'Отправка', text: 'Упаковываем и отправляем выбранной службой доставки — посылку можно отследить по трек-номеру.' },
@@ -79,7 +79,7 @@ const deliveryFaq = faq.filter(([q]) => /оплатить|доставляете
 
     <section class="block cta-row">
       <a class="btn btn-primary" href="/catalog/"><Icon name="cart" size={18} />Выбрать прибор</a>
-      <a class="btn btn-ghost" href={`${site.whatsapp}?text=${encodeURIComponent('Здравствуйте! Вопрос по доставке.')}`} target="_blank" rel="noopener"><Icon name="whatsapp" size={18} />Спросить о доставке</a>
+      <a class="btn btn-ghost" href={site.max} target="_blank" rel="noopener"><Icon name="max" size={18} />Спросить о доставке</a>
       <a class="btn btn-ghost" href={site.phones[1].href}><Icon name="phone" size={18} />{site.phones[1].display}</a>
     </section>
 

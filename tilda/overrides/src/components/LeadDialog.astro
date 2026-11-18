@@ -42,12 +42,12 @@ const mini = Object.fromEntries(products.map((p) => [p.slug, { name: p.name, pri
   </div>
   <div class="lead-fallback" data-lead-fallback hidden>
     <h2>Не получилось отправить с сайта</h2>
-    <p class="muted">Отправьте заявку одним нажатием в WhatsApp — текст уже готов. Или позвоните.</p>
-    <a class="btn btn-primary" data-lead-wa target="_blank" rel="noopener"><Icon name="whatsapp" size={18} />Отправить в WhatsApp</a>
+    <p class="muted">Нажмите кнопку — текст заявки скопируется, откроется наш чат в MAX: вставьте его и отправьте. Или позвоните.</p>
+    <a class="btn btn-primary" data-lead-wa target="_blank" rel="noopener"><Icon name="max" size={18} />Скопировать заявку и открыть MAX</a>
     <a class="btn btn-ghost" href={site.phones[0].href}><Icon name="phone" size={18} />{site.phones[0].display}</a>
   </div>
 </dialog>
-<script type="application/json" id="lead-data" set:html={JSON.stringify({ products: mini, whatsapp: site.whatsapp })} />
+<script type="application/json" id="lead-data" set:html={JSON.stringify({ products: mini, max: site.max })} />
 
 <script>
   import { formatPhone, rememberSource, type LeadType } from '../scripts/lead';
@@ -56,7 +56,7 @@ const mini = Object.fromEntries(products.map((p) => [p.slug, { name: p.name, pri
   rememberSource();
   const dialog = document.getElementById('lead-dialog') as HTMLDialogElement;
   const data = JSON.parse(document.getElementById('lead-data')!.textContent!) as {
-    products: Record<string, { name: string; price: string; img: string }>; whatsapp: string;
+    products: Record<string, { name: string; price: string; img: string }>; max: string;
   };
   const $ = <T extends HTMLElement>(sel: string) => dialog.querySelector<T>(sel)!;
   const form = $<HTMLFormElement>('[data-lead-form]');
@@ -125,10 +125,12 @@ const mini = Object.fromEntries(products.map((p) => [p.slug, { name: p.name, pri
     const submit = $<HTMLButtonElement>('[data-lead-submit]');
     const send = (window as unknown as { t_forms__initBtnClick?: (e: object) => void }).t_forms__initBtnClick;
     if (send) { send({ target: submit, srcElement: submit, preventDefault() {} }); return; }
-    // Библиотека форм не загрузилась — предлагаем отправить ту же заявку в WhatsApp.
+    // Библиотека форм не загрузилась — предлагаем отправить ту же заявку в MAX.
     const f = new FormData(form);
     const text = [TEXT[type].title + ' — infrahunt.ru', String(f.get('Товар') || ''), `Имя: ${f.get('Имя')}`, `Телефон: ${f.get('Телефон')}`, String(f.get('Комментарий') || '')].filter(Boolean).join('\n');
-    $<HTMLAnchorElement>('[data-lead-wa]').href = `${data.whatsapp}?text=${encodeURIComponent(text)}`;
+    const link = $<HTMLAnchorElement>('[data-lead-wa]');
+    link.href = data.max;
+    link.onclick = () => { navigator.clipboard?.writeText(text).catch(() => {}); };
     form.hidden = true;
     $('[data-lead-fallback]').hidden = false;
   });

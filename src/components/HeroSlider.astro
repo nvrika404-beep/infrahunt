@@ -1,19 +1,38 @@
 ---
-const slides = [
+import { existsSync } from 'node:fs';
+type Slide = { name: string; alt: string; href?: string; ext?: string; links?: { href: string; label: string }[] };
+const slides: Slide[] = [
+  // Два флагмана на одном баннере: левая половина (на телефоне — верхняя) ведёт на 660, правая (нижняя) — на 1275.
+  { name: 'dovod-pro', ext: 'jpg', alt: 'Два новых флагмана RikaNV — Dovod PRO 660 LRF и Dovod PRO 1275 LRF', links: [
+    { href: '/product/rikanv-dovod-pro-660-lrf/', label: 'RikaNV Dovod PRO 660 LRF' },
+    { href: '/product/rikanv-dovod-pro-1275-lrf/', label: 'RikaNV Dovod PRO 1275 LRF' },
+  ] },
   { name: 'kaban', href: '/catalog/teplovizionnye-pricely/', alt: 'Новинка от RikaNV — тепловизионный прицел Kaban' },
   { name: 'moskit', href: '/catalog/teplovizionnye-pricely/', alt: 'Новинка от RikaNV — тепловизионный прицел Moskit' },
   { name: 'rikanv', href: '/catalog/', alt: 'Тепловизионные прицелы RikaNV Kaban 350 LRF и Moskit 650 LRF' },
-];
+].filter((s) => existsSync(`public/img/banners/${s.name}-tall.${s.ext ?? 'webp'}`)); // баннер выходит, только когда есть и мобильная версия
 ---
 <section class="slider" aria-roledescription="карусель" aria-label="Новинки RikaNV">
   <div class="track" data-track>
     {slides.map((s, i) => (
-      <a class="slide" href={s.href} aria-label={`${i + 1} из ${slides.length}: ${s.alt}`}>
-        <picture>
-          <source media="(max-width: 640px)" srcset={`/img/banners/${s.name}-tall.webp`} />
-          <img src={`/img/banners/${s.name}-wide.webp`} width="1104" height="524" alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
-        </picture>
-      </a>
+      <Fragment>
+        {s.links ? (
+          <div class="slide slide-split" role="group" aria-label={`${i + 1} из ${slides.length}: ${s.alt}`}>
+            <picture>
+              <source media="(max-width: 640px)" srcset={`/img/banners/${s.name}-tall.${s.ext ?? 'webp'}`} />
+              <img src={`/img/banners/${s.name}-wide.${s.ext ?? 'webp'}`} width="1104" height="524" alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
+            </picture>
+            {s.links.map((l) => <a class="hot" href={l.href} aria-label={l.label}></a>)}
+          </div>
+        ) : (
+          <a class="slide" href={s.href} aria-label={`${i + 1} из ${slides.length}: ${s.alt}`}>
+            <picture>
+              <source media="(max-width: 640px)" srcset={`/img/banners/${s.name}-tall.${s.ext ?? 'webp'}`} />
+              <img src={`/img/banners/${s.name}-wide.${s.ext ?? 'webp'}`} width="1104" height="524" alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
+            </picture>
+          </a>
+        )}
+      </Fragment>
     ))}
   </div>
   <button class="arrow prev" type="button" aria-label="Предыдущий баннер" data-prev><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6" /></svg></button>
@@ -60,6 +79,10 @@ const slides = [
   .track::-webkit-scrollbar { display: none; }
   .slide { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; }
   .slide img { width: 100%; aspect-ratio: 1104 / 524; object-fit: cover; }
+  .slide-split { position: relative; display: flex; }
+  .slide-split picture { width: 100%; }
+  .hot { position: absolute; top: 0; bottom: 0; width: 50%; }
+  .hot:first-of-type { left: 0; } .hot:last-of-type { right: 0; }
   .arrow {
     position: absolute; top: 50%; translate: 0 -50%; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
     background: rgba(11, 12, 15, 0.55); border: 1px solid var(--line-strong); color: #fff; backdrop-filter: blur(8px);
@@ -75,6 +98,8 @@ const slides = [
   .dots [aria-selected='true'] span { background: var(--heat); }
   @media (max-width: 640px) {
     .slide img { aspect-ratio: 867 / 1130; }
+    .hot { left: 0; right: 0; width: auto; height: 62%; } .hot:last-of-type { height: 38%; } /* на вертикальном баннере 1275 снизу, 660 с заголовком выше */
+    .hot:first-of-type { top: 0; bottom: auto; } .hot:last-of-type { top: auto; bottom: 0; }
     .arrow { display: none; }
   }
 </style>
