@@ -35,12 +35,12 @@
   "_header/00-header.html": {
    "id": 5869012203,
    "page": 391139103,
-   "hash": "bc348cf7ef74943fbe7879e6ef379790"
+   "hash": "cd31442b62238bb5535879ecb871eb66"
   },
   "_footer/00-footer.html": {
    "id": 5869012403,
    "page": 391139403,
-   "hash": "319ae7203ea16655ffdc0d3e4680c87d"
+   "hash": "57ea637afa473de19ea0d71c02b641b7"
   },
   "_footer/01-media.html": {
    "id": 5869012503,
@@ -50,7 +50,7 @@
   "_footer/02-lead.html": {
    "id": 5869013403,
    "page": 391139403,
-   "hash": "b9a2e03724a903cdd2c37e238b677299"
+   "hash": "03c946d86fba13c70d1517cbd6bc4a02"
   },
   "_footer/03-toast.html": {
    "id": 5869013603,
@@ -60,7 +60,7 @@
   "index/00-hero.html": {
    "id": 5869013703,
    "page": 391139603,
-   "hash": "8de99a59aab4d9ecfca8b54ad1b0956e"
+   "hash": "a4b1810c5e6d914f8637285fd4502a3e"
   },
   "index/01-section.html": {
    "id": 5869013803,
@@ -95,7 +95,7 @@
   "index/07-section.html": {
    "id": 5869015703,
    "page": 391139603,
-   "hash": "fe6337faadecc819c9001743d84d3ae9"
+   "hash": "babdc016c7ddf05e09e6b59c79f418be"
   },
   "index/08-section.html": {
    "id": 5869015903,
@@ -115,7 +115,7 @@
   "cart/02-layout.html": {
    "id": 5869035803,
    "page": 391151803,
-   "hash": "9e4382f370a0b80854c2db6f576406a4"
+   "hash": "51f64f02cb5cdffab867e68eb9f8de1f"
   },
   "catalog__binokli/00-intro.html": {
    "id": 5869036003,
@@ -175,7 +175,7 @@
   "catalog__dnevnaya-optika/01-soon-hero.html": {
    "id": 5869055003,
    "page": 391153303,
-   "hash": "b84ec7a98d40925afd27cb6aa726d1ee"
+   "hash": "8364a204004cd902e520e0c548efa406"
   },
   "catalog__dnevnaya-optika/02-section.html": {
    "id": 5869055203,
@@ -275,7 +275,7 @@
   "dostavka-i-oplata/01-section.html": {
    "id": 5869069503,
    "page": 391164603,
-   "hash": "3f91a9bc4c8636675551e7a4e777df0f"
+   "hash": "6d34ab882e94dd61b8094eb0f490fd2f"
   },
   "dostavka-i-oplata/02-block.html": {
    "id": 5869069603,
@@ -290,7 +290,7 @@
   "dostavka-i-oplata/04-block.html": {
    "id": 5869070003,
    "page": 391164603,
-   "hash": "6831f8da63d9e782290ecf2abdac8010"
+   "hash": "983bb07fc8364b541b61dc478250d82f"
   },
   "dostavka-i-oplata/05-block.html": {
    "id": 5869070103,
@@ -315,7 +315,7 @@
   "kontakty/02-row.html": {
    "id": 5869070803,
    "page": 391165103,
-   "hash": "80f5d2d1262c03a160cbddc0a031b924"
+   "hash": "cc268c27e685520a29f98f711920f60d"
   },
   "kontakty/03-map-block.html": {
    "id": 5869082603,
@@ -340,7 +340,7 @@
   "product__rikanv-dovod-pro-1275-lrf/00-product.html": {
    "id": 5869083903,
    "page": 391170903,
-   "hash": "a801d81b26cc432e9f489e4cfe48fe1a"
+   "hash": "62c06fd3a81e7c3c10792e0e6694fff2"
   },
   "product__rikanv-dovod-pro-1275-lrf/01-tabs.html": {
    "id": 5869084003,
@@ -380,7 +380,7 @@
   "product__rikanv-dovod-pro-660-lrf/00-product.html": {
    "id": 5869086203,
    "page": 391172003,
-   "hash": "be001616ad96edc096bb5838a798a74a"
+   "hash": "9f8ed40dfbc197402b2ca053dbbd0500"
   },
   "product__rikanv-dovod-pro-660-lrf/01-tabs.html": {
    "id": 5869086303,
@@ -420,7 +420,7 @@
   "product__rikanv-kaban-335-lrf/00-product.html": {
    "id": 5869112603,
    "page": 391176903,
-   "hash": "3174d6e11c7fccd2b39afbee10044045"
+   "hash": "a713fc9bfaaf0a8dc4c6160f151ff07d"
   },
   "product__rikanv-kaban-335-lrf/01-tabs.html": {
    "id": 5869112803,
@@ -460,7 +460,7 @@
   "product__rikanv-kaban-350-lrf/00-product.html": {
    "id": 5869113903,
    "page": 391178103,
-   "hash": "db14ecd5be3d19b225daeafa87af538f"
+   "hash": "fd3ab5b683a66c90e58c54e3ced992fe"
   },
   "product__rikanv-kaban-350-lrf/01-tabs.html": {
    "id": 5869114003,
@@ -500,7 +500,7 @@
   "product__rikanv-kaban-650-lrf-pro/00-product.html": {
    "id": 5869127003,
    "page": 391182103,
-   "hash": "6fbcf0ad0ff897cee91931763df928c4"
+   "hash": "3713958edffd88e648c77b8fbdbb23e0"
   },
   "product__rikanv-kaban-650-lrf-pro/01-tabs.html": {
    "id": 5869127103,
@@ -540,7 +540,7 @@
   "product__rikanv-kaban-650-lrf/00-product.html": {
    "id": 5869128203,
    "page": 391183203,
-   "hash": "43d8bca1663b7d13a0e35746ee5b7543"
+   "hash": "69ffa90a56614f16135777a06a0cf8bb"
   },
   "product__rikanv-kaban-650-lrf/01-tabs.html": {
    "id": 5869145203,
@@ -580,7 +580,7 @@
   "product__rikanv-moskit-335-lrf/00-product.html": {
    "id": 5869146103,
    "page": 391187403,
-   "hash": "33f7c9af3376c3d2093ffaf1d58276aa"
+   "hash": "c0dd92a13075304481c4adaabcff8ff1"
   },
   "product__rikanv-moskit-335-lrf/01-tabs.html": {
    "id": 5869146403,
@@ -620,7 +620,7 @@
   "product__rikanv-moskit-650-lrf/00-product.html": {
    "id": 5869169303,
    "page": 391188203,
-   "hash": "fd723e56908fde8475bc8cf637375186"
+   "hash": "b70b67178fbfd6457815a50641f82cb6"
   },
   "product__rikanv-moskit-650-lrf/01-tabs.html": {
    "id": 5869169503,
@@ -660,7 +660,7 @@
   "product__rikanv-sinica-630/00-product.html": {
    "id": 5869170603,
    "page": 391194303,
-   "hash": "9d53f1eaccc1aa44db8c7c2db854cdbd"
+   "hash": "48b26269db992537fe1da55fec5b330a"
   },
   "product__rikanv-sinica-630/01-tabs.html": {
    "id": 5869170703,
@@ -690,7 +690,7 @@
   "product__rikanv-snegir-1280/00-product.html": {
    "id": 5869171503,
    "page": 391195303,
-   "hash": "1bd5517b0697146f46d48f3107b398e9"
+   "hash": "116ac51c9e42c0b2c3b595cfb06b6f9d"
   },
   "product__rikanv-snegir-1280/01-tabs.html": {
    "id": 5869171603,
@@ -730,7 +730,7 @@
   "product__rikanv-snegir-640/00-product.html": {
    "id": 5869183303,
    "page": 391200703,
-   "hash": "551008cdad50d9e5f67adc786fbae78c"
+   "hash": "cd7055845896014f3a0180b190b29e1a"
   },
   "product__rikanv-snegir-640/01-tabs.html": {
    "id": 5869183403,
@@ -770,7 +770,7 @@
   "product__rikanv-strekoza-brf-2000/00-product.html": {
    "id": 5869186603,
    "page": 391201503,
-   "hash": "44b54c138f9602d8835a98c3ca9ce050"
+   "hash": "86a3cdfaadf10963b71a4567bf73ba27"
   },
   "product__rikanv-strekoza-brf-2000/01-tabs.html": {
    "id": 5869194903,
@@ -810,7 +810,7 @@
   "product__rikanv-strekoza-brf-4000/00-product.html": {
    "id": 5869196203,
    "page": 391206503,
-   "hash": "6f0dde29d81bf0bc8a5c31dea598b6d8"
+   "hash": "c57084a3aaf3263f3a3da0113b21aa6a"
   },
   "product__rikanv-strekoza-brf-4000/01-tabs.html": {
    "id": 5869196303,
